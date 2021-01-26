@@ -54,7 +54,7 @@ export class Main extends React.Component<IMainProps, IMainState> {
 
   componentWillMount() {
     this.darkModeEnabled = window.location.search.indexOf('dark') !== -1;
-    document.addEventListener('visibilitychange', this.handleVisibilityChange, false);
+    // document.addEventListener('visibilitychange', this.handleVisibilityChange, false);
     const store = new GistStorage(this.GetFeed());
     this.loadGist(store);
 
@@ -93,12 +93,6 @@ export class Main extends React.Component<IMainProps, IMainState> {
 
       this.forceUpdate(() => { this.displayFeedOnTopOfTheScreen(id.toString()); });
     };
-  }
-
-  handleVisibilityChange = () => {
-    if (!document.hidden && this.isUpdated) {
-      location.reload();
-    }
   }
 
   displayFeedOnTopOfTheScreen(feedId: string) {
