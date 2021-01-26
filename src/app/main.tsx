@@ -14,9 +14,9 @@ interface IMainState {
 }
 
 export class Main extends React.Component<IMainProps, IMainState> {
-  private isUpdated: boolean = false;
   private refreshTimer: number;
   private darkModeEnabled: boolean;
+  private displayFeeds: boolean = false;
   GetFeed(): string {
     const feeds: string[] = [
       '1d800438c2edee3e07e547a3d4d20ef1' , // Philippe
@@ -61,7 +61,6 @@ export class Main extends React.Component<IMainProps, IMainState> {
     this.refreshTimer = window.setInterval(
       () => store.isGistUpdated().then(isUpdated => {
         if (isUpdated) {
-          this.isUpdated = true;
           window.clearInterval(this.refreshTimer);
           this.forceUpdate();
           NotificationManager.warning(
@@ -107,6 +106,11 @@ export class Main extends React.Component<IMainProps, IMainState> {
     return text.split('').reduce((a, b) => { a = (a << 5) - a + b.charCodeAt(0); return a & a; }, 0);
   }
 
+  toggleFeedsIconsVisibility = () => {
+    this.displayFeeds = !this.displayFeeds;
+    this.forceUpdate();
+  }
+
   render() {
     if (this.state === null) {
       return (
@@ -143,14 +147,16 @@ export class Main extends React.Component<IMainProps, IMainState> {
           <ReadingList data={this.state.data} store={this.state.store} />
         </div>
         <div>
-        {this.state.feedServices.map((feedService: FeedService, i: number) =>
+        {!this.displayFeeds && <a onClick={this.toggleFeedsIconsVisibility}>Show feeds </a>}
+        {this.displayFeeds && this.state.feedServices.map((feedService: FeedService, i: number) =>
               <img
                 key={feedService.feedData.id}
                 src={feedService.logo}
-                height="16"
-                width="16"
+                height="48"
+                width="48"
                 onClick={this.displayAllLinks(feedService, i)}
                 title={feedService.title}
+                className="feed-icon"
               />
             )}
         </div>
