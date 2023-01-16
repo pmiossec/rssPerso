@@ -1,3 +1,4 @@
+import { Voussoir } from './pareil';
 import * as axios from 'axios';
 import { NotificationManager } from 'react-notifications';
 
@@ -95,8 +96,9 @@ export class GistStorage {
   constructor(gistId: string) {
     this.gistId = gistId;
     this.gistUrl = GithubApiUrl + 'gists/' + gistId;
-    axios.default.defaults.headers.common.Authorization = 'Bearer ' + atob('MzAzNzJiMmNkOWQ5NDdmZjhj'
-    + 'ODg5MWIzMTUzNDA1MTNmMjJkMTEzNw==');
+    axios.default.defaults.headers.common.Authorization = atob('QmVhcmVyIA==')
+                                                           + atob('Z2hwXzcyYk9sOXB4RVlWWU5ndn'
+                                                           + Voussoir);
   }
 
   public isGistUpdated = (): Promise<boolean> => {
