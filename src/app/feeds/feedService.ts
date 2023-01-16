@@ -11,7 +11,7 @@ export interface Link extends ReadListItem {
 interface CorsProxyHandler {
   url: string;
   headers: {};
-  responseHandler: (response: {}) => string;
+  responseHandler: (response: string) => string;
 }
 
 const defaultCorsProxyResponseHandler = (response: string) => {
@@ -69,14 +69,14 @@ export class FeedService {
   public httpProtocol: string;
   public logo: string;
   public title: string = 'Future title';
-  public webSiteUrl: string | null;
+  public webSiteUrl: string | null = null;
   public links: Link[] = [];
   public allLinks: Link[] = [];
-  public content: string;
+  public content: string = 'No Content';
   public clearDate: Date = new Date(1900, 1, 1);
   private isOrderNewerFirst = false;
   private shouldDisplayAllLinks: boolean = false;
-  public refreshInterval: number;
+  public refreshInterval: number = -1;
 
   constructor(
     public feedData: FeedData,

@@ -14,8 +14,8 @@ interface IMainState {
 }
 
 export class Main extends React.Component<IMainProps, IMainState> {
-  private refreshTimer: number;
-  private darkModeEnabled: boolean;
+  private refreshTimer: number = -1;
+  private darkModeEnabled: boolean = true;
   private displayFeeds: boolean = false;
   GetFeed(): string {
     const feeds: string[] = [

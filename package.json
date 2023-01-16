@@ -11,7 +11,7 @@
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
     "react-notifications": "^1.7.2",
-    "react-scripts-ts": "^4.0.8",
+    "react-scripts": "^4.0.3",
     "typescript": "^4.4.4"
   },
   "devDependencies": {
@@ -20,12 +20,18 @@
   },
   "scripts": {
     "start": "npm-run-all -p watch-css start-ts",
-    "start-ts": "react-scripts-ts start",
-    "build": "set PUBLIC_URL=.&& npm run build-css && react-scripts-ts build",
-    "test": "react-scripts-ts test --env=jsdom",
-    "eject": "react-scripts-ts eject",
+    "start-ts": "react-scripts start",
+    "build": "set PUBLIC_URL=.&& npm run build-css && react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
     "build-css": "node-sass-chokidar src/ -o src/",
     "watch-css": "npm run build-css && node-sass-chokidar src/ -o src/ --watch --recursive"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
   },
   "browserslist": [
     "defaults"

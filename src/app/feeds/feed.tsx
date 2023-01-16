@@ -15,7 +15,7 @@ interface IFeedState { }
 export class Feed extends React.Component<IFeedProps, IFeedState> {
   shouldDisplayEmptyFeeds: boolean = false;
   hiddenTextArea: HTMLTextAreaElement = document.createElement('textarea');
-  timerId: number;
+  timerId: number = -1;
 
   componentWillMount(): void {
     this.loadFeed().then(() => {
