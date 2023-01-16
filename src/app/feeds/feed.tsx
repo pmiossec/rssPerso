@@ -128,11 +128,12 @@ export class Feed extends React.Component<IFeedProps, IFeedState> {
       .replace('Basket', '🏀')
       .replace('Football', '⚽')
       .replace('Handball', '🤾')
+      .replace('Hand', '🤾')
       .replace('Rugby', '🏉')
       .replace('Golf', '⛳')
       .replace('Cyclisme', '🚴‍')
       .replace('Sports US', '🇺🇸')
-      .replace('Sports d\'hiver', '🎿')
+      .replace('Sports d\'hiver', '❄️')
       .replace('Judo', '🥋')
       .replace('Volley', '🏐')
       .replace('Boxe', '🥊')
@@ -141,7 +142,20 @@ export class Feed extends React.Component<IFeedProps, IFeedState> {
       .replace('Natation', '🏊🏻')
       .replace('Escrime', '🤺')
       .replace('Athlétisme', '🏃‍')
-      .replace('Auto/Moto', '🏎');
+      .replace('Athlé', '🏃‍')
+      .replace('Auto/Moto', '🚗')
+      .replace('Auto', '🚗')
+      .replace('Moto', '🏍️')
+      .replace('F1', '🏎')
+      // .replace('Hockey', '🏎')
+      .replace('Baseball', '⚾')
+      .replace('Ski alpin', '🎿')
+      .replace('Rallye', '🚗🌄')
+      .replace('Equitation', '🏇')
+      .replace('Esport', '💻')
+      .replace('NBA', '🇺🇸')
+      .replace('France', '🇫🇷')
+      ;
   }
 
   render() {
