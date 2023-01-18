@@ -42,7 +42,7 @@ const minute = 60 * 1000;
 const hour = 60 * minute;
 const oneDayInterval = 24 * hour;
 const maxRefreshInterval = 30 * minute;
-const minRefreshInterval = 5 * minute;
+const minRefreshInterval = 10 * minute;
 
 export class FeedService {
   private proxySwitcher: number = 0;
@@ -352,13 +352,13 @@ export class FeedService {
 
     const lastFeedDate = this.allLinks[this.allLinks.length - 1].publicationDate;
     const lastRefreshInterval = new Date().getTime() - lastFeedDate.getTime();
-    if (lastRefreshInterval > 2 * oneDayInterval) {
+    if (lastRefreshInterval > 1.5 * oneDayInterval) {
       this.refreshInterval = noRefresh;
       return;
     }
 
     if (lastRefreshInterval > oneDayInterval) {
-      this.refreshInterval = maxRefreshInterval;
+      this.refreshInterval = 2 * hour;
       return;
     }
 
