@@ -17,24 +17,29 @@ interface CorsProxyHandler {
 const defaultCorsProxyResponseHandler = (response: string) => {
   return response;
 };
-// const defaultCorsProxyHeaders = { Origin: 'https://pmiossec.github.io/'};
+const defaultCorsProxyHeaders = { Origin: 'https://pmiossec.github.io/', Usage: 'RssPerso'};
 
 // cors proxy list: https://gist.github.com/jimmywarting/ac1be6ea0297c16c477e17f8fbe51347
 const proxyHandlers: CorsProxyHandler[] = [
-  {
-    url: 'cors-anywhere.herokuapp.com/',
-    headers: { headers: {
-      'X-Requested-With': 'XMLHttpRequest',
-      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:64.0) Gecko/20100101 Firefox/64.0'
-    } },
-    responseHandler: defaultCorsProxyResponseHandler
-  }
+  // {
+  //   url: 'cors-anywhere.herokuapp.com/',
+  //   headers: { headers: {
+  //     'X-Requested-With': 'XMLHttpRequest',
+  //     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:64.0) Gecko/20100101 Firefox/64.0'
+  //   } },
+  //   responseHandler: defaultCorsProxyResponseHandler
+  // }
   // ,
   // {
-  //   url: 'thingproxy.freeboard.io/fetch/',
+  //   url: 'localhost:7071/api/CorsProxyPerso?',
   //   headers: defaultCorsProxyHeaders,
   //   responseHandler: defaultCorsProxyResponseHandler
   // },
+  {
+    url: 'corsproxyperso20230118112658.azurewebsites.net/api/CorsProxyPerso?',
+    headers: defaultCorsProxyHeaders,
+    responseHandler: defaultCorsProxyResponseHandler
+  },
   // {
   //   url: 'crossorigin.me/',
   //   headers: defaultCorsProxyHeaders,
