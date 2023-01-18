@@ -58,6 +58,7 @@ html, body, #root {
   }
 
 .feed {
+  position: relative;
   border: 1px solid lightgray;
   margin: 2px;
   padding: 5px;
@@ -111,11 +112,13 @@ a {
   font-size: 12px;
 }
 
+div.close-bottom-right {
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+}
+
 .text-badge {
-    a {
-      font-size: 14px;
-      font-family: inherit;
-    }
     cursor: pointer;
     display: inline-block;
     position: relative;
@@ -136,7 +139,13 @@ a {
       background-color: #f19c4c;
     }
     a {
-      color: white;
+        font-size: 14px;
+        font-family: inherit;
+        color: white;
+        &.emoji-light {
+          color: transparent;
+          text-shadow: 0 0 0 #cfcdcd;
+        }
         &:hover {
           color: #5aadbb;
         }

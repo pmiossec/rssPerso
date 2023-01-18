@@ -221,6 +221,10 @@ export class Feed extends React.Component<IFeedProps, IFeedState> {
       </div>
     );
 
+    const closeButton = <div className="text-badge refresh close-bottom-right" onClick={this.clearAllFeed}>
+    <a className="emoji-light">❌</a>
+  </div>
+
     return (
       <div className="feed" id={this.props.id.toString()}>
         <div className="title">
@@ -235,6 +239,7 @@ export class Feed extends React.Component<IFeedProps, IFeedState> {
           </div>
         </div>
         {linksToDisplay.length !== 0 && links}
+        {linksToDisplay.length !== 0 && linksToDisplay.length > 5 && closeButton}
       </div>
     );
   }
