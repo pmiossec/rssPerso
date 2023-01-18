@@ -160,9 +160,6 @@ export class Main extends React.Component<IMainProps, IMainState> {
               />
             )}
         </div>
-        <div>
-          <a href="https://cors-anywhere.herokuapp.com/" target="_blank">cors-anywhere</a>
-        </div>
       </main>
     );
   }

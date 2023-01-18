@@ -22,8 +22,8 @@ const defaultCorsProxyHeaders = { Origin: 'https://pmiossec.github.io/', Usage: 
 // cors proxy list: https://gist.github.com/jimmywarting/ac1be6ea0297c16c477e17f8fbe51347
 const proxyHandlers: CorsProxyHandler[] = [
   {
-    //   url: 'localhost:7071/api/CorsProxyPerso?',
-    url: 'corsproxyperso20230118112658.azurewebsites.net/api/CorsProxyPerso?',
+    // url: 'localhost:7071/api/CorsProxyPerso?',
+    url: 'https://corsproxyperso20230118112658.azurewebsites.net/api/CorsProxyPerso?',
     headers: defaultCorsProxyHeaders,
     responseHandler: defaultCorsProxyResponseHandler
   }
@@ -161,7 +161,7 @@ export class FeedService {
   public loadFeedContent(): Promise<void> {
     const url = this.feedData.noCorsProxy
       ? this.feedData.url
-      : this.httpProtocol + '//' + this.proxyHandler.url + this.feedData.url;
+      : ((this.proxyHandler.url.indexOf('://') != -1) ? this.proxyHandler.url : this.httpProtocol + '//' + this.proxyHandler.url) + this.feedData.url;
     return axios.default
       .get(url, this.feedData.noCorsProxy ? undefined : this.proxyHandler.headers)
       .then(this.processFeedXml)
