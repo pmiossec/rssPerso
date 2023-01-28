@@ -171,18 +171,18 @@ export class Feed extends React.Component<IFeedProps, IFeedState> {
               {linksToDisplay.length}
             </a>
           </div>
-          <div className="text-badge refresh" onClick={this.refreshFeed}>
+          {/* <div className="text-badge refresh" onClick={this.refreshFeed}>
             <a> ⟳
             </a>
-          </div>
+          </div> */}
           {!this.props.feed.isDisplayingAllLinks() &&
             <div className="text-badge" onClick={this.displayAll}>
               <a>All</a>
             </div>}
-          {linksToDisplay.length !== 0 &&
+          {/* {linksToDisplay.length !== 0 &&
             <div className="text-badge open" onClick={this.openAll}>
               <a>Open All</a>
-            </div>}
+            </div>} */}
         </span>
       );
     } else {
@@ -200,12 +200,13 @@ export class Feed extends React.Component<IFeedProps, IFeedState> {
       }
     }
 
+    const now = new Date();
     let links = (
       <div>
         {linksToDisplay.map((l: Link, i: number) =>
           <div key={i}>
             [<a onClick={this.clearFeed.bind(null, l.publicationDate)}>
-              {Helper.DateFormatter.formatDate(l.publicationDate)}
+              {Helper.DateFormatter.formatDate(l.publicationDate, now)}
             </a>|
             <a onClick={this.addToReadList(l, i)}>📑</a>]
             <a
@@ -229,7 +230,7 @@ export class Feed extends React.Component<IFeedProps, IFeedState> {
       <div className="feed" id={this.props.id.toString()}>
         <div className="title">
           <div>
-            <img src={this.props.feed.logo} />
+            <img src={this.props.feed.logo} onClick={this.refreshFeed}/> &nbsp;
             <a href={this.props.feed.webSiteUrl as string} target="_blank" rel="noreferrer" >
               {' '}{this.props.feed.title}
             </a>
@@ -239,7 +240,7 @@ export class Feed extends React.Component<IFeedProps, IFeedState> {
           </div>
         </div>
         {linksToDisplay.length !== 0 && links}
-        {linksToDisplay.length !== 0 && linksToDisplay.length > 5 && closeButton}
+        {linksToDisplay.length !== 0 && linksToDisplay.length > 8 && closeButton}
       </div>
     );
   }

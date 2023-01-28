@@ -58,10 +58,11 @@ export class ReadingList extends React.Component<
       const data = this.props.data;
       readItems = data.readList.map((l: ReadListItem, i: number) => {
         const feed = data.feeds.find(f => f.id === l.idFeed);
+        const now = new Date();
         return (
           <div key={i}>
             [<span className="date">
-              {Helper.DateFormatter.formatDate(l.publicationDate)}
+              {Helper.DateFormatter.formatDate(l.publicationDate, now)}
             </span>
             |<a href={l.url} target="_blank" rel="noreferrer">
               📄

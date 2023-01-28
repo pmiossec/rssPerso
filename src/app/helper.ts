@@ -3,14 +3,21 @@ export namespace DateFormatter {
     return Array(Math.max(digits - String(num).length + 1, 0)).join('0') + num;
   };
 
-  export const formatDate = (date: Date): string => {
+  export const formatDate = (date: Date, now: Date): string => {
     if (!date) {
       return '-';
     }
-    const now = new Date();
-    return now.getDate() === date.getDate() &&
-    now.getMonth() === date.getMonth()
+    const nowDay = now.getDate();
+    const month = date.getMonth();
+    const day = date.getDate();
+    const year = date.getFullYear();
+    if (now.getFullYear() - year > 1)
+    {
+      return `${padDigits(month)}/${padDigits(year)}`
+    }
+
+    return nowDay <= day && now.getMonth() === month
       ? `${padDigits(date.getHours())}:${padDigits(date.getMinutes())}`
-      : `${padDigits(date.getDate())}/${padDigits(date.getMonth() + 1)}`;
+      : `${padDigits(day)}/${padDigits(month + 1)}`;
   };
 }
