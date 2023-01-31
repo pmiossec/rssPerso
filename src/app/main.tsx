@@ -4,6 +4,7 @@ import { FeedService } from './feeds/feedService';
 import { Feed } from './feeds/feed';
 import { ReadingList } from './readingList/readingList';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
+//TODO replace by https://www.npmjs.com/package/react-notifications-component
 import 'react-notifications/lib/notifications.css';
 
 interface IMainProps { }
@@ -63,11 +64,7 @@ export class Main extends React.Component<IMainProps, IMainState> {
         if (isUpdated) {
           window.clearInterval(this.refreshTimer);
           this.forceUpdate();
-          NotificationManager.warning(
-            'Need refresh!!',
-            'Updated',
-            5000
-          );
+          NotificationManager.warning('🔃 Need refresh!!', 'Updated', 1000);
 
           this.loadGist(store);
         }

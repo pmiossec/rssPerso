@@ -140,7 +140,7 @@ export class FeedService {
           const error = `${this.feedData.url} => Feed format not supported:` + feedFormat;
           // tslint:disable-next-line:no-console
           console.error(error);
-          NotificationManager.error(error, 'Feed format not supported', 5000);
+          NotificationManager.error(error, 'Feed format not supported', 3000);
           this.title = error;
       }
 

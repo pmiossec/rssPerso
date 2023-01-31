@@ -119,11 +119,7 @@ export class GistStorage {
     .catch(err => {
       // tslint:disable-next-line:no-console
       console.error('Failed to load the gist.', err);
-      NotificationManager.error(
-        'Failed to load the gist:' + err,
-        'Error fetching',
-        25000
-      );
+      NotificationManager.error(`Gist loading:\n${err}`, 'Error fetching', 10000);
       return false;
     });
   }
@@ -150,11 +146,7 @@ export class GistStorage {
       .catch(err => {
         // tslint:disable-next-line:no-console
         console.error(err);
-        NotificationManager.warning(
-          'Loading data from cache...',
-          'Loading data',
-          3000
-        );
+        NotificationManager.warning('Loading data from cache...', 'Loading data', 3000);
         this.data = JSON.parse(localStorage.getItem('rssPerso')!) as Gist;
         return this.data;
       });
@@ -205,11 +197,7 @@ export class GistStorage {
       .catch(err => {
         // tslint:disable-next-line:no-console
         console.error('Failed to load the gist.', err);
-        NotificationManager.error(
-          'Failed to load the gist:' + err,
-          'Error fetching',
-          25000
-        );
+        NotificationManager.error(`Gist loading:\n${err}`, 'Error fetching', 10000);
         return null;
       });
   }
@@ -222,11 +210,7 @@ export class GistStorage {
       .then((response: axios.AxiosResponse<Storage>) => {
         const newRevisionCount = response.data.history.length;
         if (newRevisionCount > this.data.revisionCount + 1) {
-          NotificationManager.warning(
-            'Probable data loss. Please refresh!!',
-            'Data lost',
-            3000
-          );
+          NotificationManager.warning('Probable data loss. Please refresh!!', 'Data lost', 3000);
         }
         var updateGist = new Date(response.data.updated_at);
         // strange value where github set in the gist not the same time than in the save response (with 1s more :()
@@ -237,11 +221,11 @@ export class GistStorage {
         this.data.readList = this.getReadingListData(response.data.files);
         // this.shouldBeSaved = false;
         this.isPushingAnUpdate = false;
-        NotificationManager.info('Successfully saved update', 'Update', 200);
+        NotificationManager.info('Save 👍', 'Update', 200);
       })
       .catch(err => {
         this.isPushingAnUpdate = false;
-        NotificationManager.error('Failed to save update', 'Update', 3000);
+        NotificationManager.error(`Save 👎:\n${err}`, 'Update', 3000);
         // tslint:disable-next-line:no-console
         console.error('err saving state:', err);
         throw err;
@@ -288,30 +272,22 @@ export class GistStorage {
     item: ReadListItem,
     saveAlsoFeedState: boolean
   ) => {
-    NotificationManager.info('Adding to reading list', 'Reading list', 200);
+    NotificationManager.info('Adding to 📃', 'Reading list', 200);
 
     if (this.data.readList.findIndex(i => i.url === item.url) > 0) {
-      NotificationManager.warning(
-        'Link already in the reading list...',
-        'Add link',
-        1000
-      );
+      NotificationManager.warning('Duplicate: already there...', 'Add link', 1000);
       return;
     }
 
     this.data.readList.push(item);
-    this.saveReadingList(
-      this.data.readList,
-      'Add item "' + item.title + '"',
-      saveAlsoFeedState ? this.data.state : null
-    )
+    this.saveReadingList(this.data.readList, `Add item "${item.title}"`, saveAlsoFeedState ? this.data.state : null)
       // tslint:disable-next-line:no-empty
       .catch(() => {});
   }
 
   public removeItemFromReadingList = (item: ReadListItem): void => {
-    const msg = 'Removing "' + item.title + '" from reading list';
-    NotificationManager.warning(msg, 'Reading list', 3000);
+    const msg = `Removing '${item.title}' from reading list`;
+    NotificationManager.warning(msg, 'Reading list', 1000);
     var indexFound = this.data.readList.findIndex(i => {
       return i.url === item.url;
     });
@@ -330,15 +306,10 @@ export class GistStorage {
   public restoreLastRemoveReadingItem = () => {
     if (this.lastItemRemoved != null) {
       this.data.readList.push(this.lastItemRemoved);
-      this.saveReadingList(
-        this.data.readList,
-        'Restoring item "' + this.lastItemRemoved.title + '"'
-      )
-        .then(() => {
-          this.lastItemRemoved = null;
-        })
-        // tslint:disable-next-line:no-empty
-        .catch(() => {});
+      this.saveReadingList(this.data.readList, `Restoring item "${this.lastItemRemoved.title}"`)
+          .then(() => { this.lastItemRemoved = null; })
+          // tslint:disable-next-line:no-empty
+          .catch(() => {});
     }
   }
 
