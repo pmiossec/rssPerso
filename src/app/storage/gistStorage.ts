@@ -95,7 +95,7 @@ export class GistStorage {
 
   constructor(gistId: string) {
     this.gistId = gistId;
-    this.gistUrl = GithubApiUrl + 'gists/' + gistId;
+    this.gistUrl = `${GithubApiUrl}gists/${gistId}`;
     axios.default.defaults.headers.common.Authorization = atob('QmVhcmVyIA==')
                                                            + atob('Z2hwXzcyYk9sOXB4RVlWWU5ndn'
                                                            + Voussoir);
@@ -196,7 +196,7 @@ export class GistStorage {
 
   private getDataFromRemote = () => {
     return axios.default
-      .get(this.gistUrl + '?disable-cache=' + new Date().getTime())
+      .get(`${this.gistUrl}?disable-cache=${new Date().getTime()}`)
       .then((response: axios.AxiosResponse<Storage>) => {
         this.dataFetched = true;
         const data = response.data;

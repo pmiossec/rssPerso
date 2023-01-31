@@ -155,13 +155,13 @@ export class FeedService {
     }
     this.calculateRefreshInterval();
     // tslint:disable-next-line:no-console
-    console.info('Refresh ' + this.title, this.refreshInterval / 1000);
+    console.info(`Refresh ${this.title}`, this.refreshInterval / 1000);
   }
 
   public loadFeedContent(): Promise<void> {
     const url = this.feedData.noCorsProxy
       ? this.feedData.url
-      : ((this.proxyHandler.url.indexOf('://') != -1) ? this.proxyHandler.url : this.httpProtocol + '//' + this.proxyHandler.url) + this.feedData.url;
+      : ((this.proxyHandler.url.indexOf('://') != -1) ? this.proxyHandler.url : `${this.httpProtocol}//${this.proxyHandler.url}`) + this.feedData.url;
     return axios.default
       .get(url, this.feedData.noCorsProxy ? undefined : this.proxyHandler.headers)
       .then(this.processFeedXml)
@@ -178,7 +178,6 @@ export class FeedService {
             (this.feedData.id + this.proxySwitcher) % proxyHandlers.length
           ];
         return this.loadFeedContent();
-        // localStorage.setItem('use_proxy.' + this.url, 'true');
       });
   }
 
