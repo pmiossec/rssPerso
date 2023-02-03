@@ -7,7 +7,6 @@ interface IFeedProps {
   key: number;
   feed: FeedService;
   id: number;
-  unsecured?: boolean;
 }
 
 interface IFeedState { }
@@ -79,13 +78,9 @@ export class Feed extends React.Component<IFeedProps, IFeedState> {
     this.forceUpdate();
   }
 
-  unsecureUrl = (url: string) => {
-    return this.props.unsecured ? url.replace('https://', 'http://') : url;
-  }
-
   openAll = (): void => {
     this.props.feed.getLinksToDisplay().forEach(element => {
-      window.open(this.unsecureUrl(element.url), '_blank', 'noreferrer');
+      window.open(element.url, '_blank', 'noreferrer');
     });
     this.clearAllFeed();
   }

@@ -137,7 +137,6 @@ export class Main extends React.Component<IMainProps, IMainState> {
                 key={feedService.feedData.id}
                 id={i}
                 feed={feedService}
-                unsecured={feedService.feedData.notSecured}
               />
             )}
           </div>
