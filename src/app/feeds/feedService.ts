@@ -20,7 +20,7 @@ const defaultCorsProxyResponseHandler = (response: string) => {
 const defaultCorsProxyHeaders = { Origin: 'https://pmiossec.github.io/', Usage: 'RssPerso'};
 
 // cors proxy list: https://gist.github.com/jimmywarting/ac1be6ea0297c16c477e17f8fbe51347
-const proxyHandlers: CorsProxyHandler[] = [
+const proxyHandler: CorsProxyHandler = 
   {
     // url: 'localhost:7071/api/CorsProxyPerso?',
     url: 'https://corsproxyperso20230118112658.azurewebsites.net/api/CorsProxyPerso?',
@@ -35,7 +35,7 @@ const proxyHandlers: CorsProxyHandler[] = [
   //   } },
   //   responseHandler: defaultCorsProxyResponseHandler
   // }
-];
+;
 
 export const noRefresh = -1;
 const minute = 60 * 1000;
@@ -45,14 +45,13 @@ const maxRefreshInterval = 30 * minute;
 const minRefreshInterval = 10 * minute;
 
 export class FeedService {
-  private proxySwitcher: number = 0;
-  private proxyHandler: CorsProxyHandler;
   public httpProtocol: string;
   public logo: string;
   public title: string = 'Future title';
   public webSiteUrl: string | null = null;
   public links: Link[] = [];
   public allLinks: Link[] = [];
+  public error:  string | null = null;
   public content: string = 'No Content';
   public clearDate: Date = new Date(1900, 1, 1);
   private isOrderNewerFirst = false;
@@ -68,7 +67,6 @@ export class FeedService {
     this.title = feedData.name;
     this.logo = feedData.icon;
     this.httpProtocol = window.location.protocol;
-    this.proxyHandler = proxyHandlers[feedData.id % proxyHandlers.length];
     if (this.offsetDate !== null) {
       this.restoreInitialClearDate(this.offsetDate);
     }
@@ -125,7 +123,7 @@ export class FeedService {
     this.links = [];
     const parser = new DOMParser();
     try {
-      var content = this.proxyHandler.responseHandler(response.data);
+      var content = proxyHandler.responseHandler(response.data);
       const xmlDoc = parser.parseFromString(content, 'text/xml');
       const feedFormat = xmlDoc.documentElement.tagName;
       switch (feedFormat) {
@@ -159,25 +157,16 @@ export class FeedService {
   }
 
   public loadFeedContent(): Promise<void> {
+    this.error = null;
     const url = this.feedData.noCorsProxy
       ? this.feedData.url
-      : ((this.proxyHandler.url.indexOf('://') != -1) ? this.proxyHandler.url : `${this.httpProtocol}//${this.proxyHandler.url}`) + this.feedData.url;
+      : ((proxyHandler.url.indexOf('://') != -1) ? proxyHandler.url : `${this.httpProtocol}//${proxyHandler.url}`) + this.feedData.url;
     return axios.default
-      .get(url, this.feedData.noCorsProxy ? undefined : this.proxyHandler.headers)
+      .get(url, this.feedData.noCorsProxy ? undefined : proxyHandler.headers)
       .then(this.processFeedXml)
       .catch(err => {
-        this.proxySwitcher++;
-        if (this.proxySwitcher > proxyHandlers.length) {
-          return new Promise<void>((resolve, reject) => {
-            reject();
-          });
-        }
-
-        this.proxyHandler =
-          proxyHandlers[
-            (this.feedData.id + this.proxySwitcher) % proxyHandlers.length
-          ];
-        return this.loadFeedContent();
+        this.error = "" + err;
+        console.error(`Error feed: ${this.title} / ${this.error}`);
       });
   }
 

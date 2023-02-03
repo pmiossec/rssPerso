@@ -12,12 +12,12 @@ interface IMainState {
   data: Gist;
   store: GistStorage;
   feedServices: FeedService[];
+  displayFeeds: boolean;
+  darkModeEnabled: boolean;
 }
 
 export class Main extends React.Component<IMainProps, IMainState> {
   private refreshTimer: number = -1;
-  private darkModeEnabled: boolean = true;
-  private displayFeeds: boolean = false;
   GetFeed(): string {
     const feeds: string[] = [
       '1d800438c2edee3e07e547a3d4d20ef1' , // Philippe
@@ -41,20 +41,18 @@ export class Main extends React.Component<IMainProps, IMainState> {
             store
           )
         );
-        this.setState({ store, data, feedServices });
+        this.setState({ store, data, feedServices, displayFeeds: false, darkModeEnabled: window.location.search.indexOf('dark') !== -1 });
       } else {
         const newState = {... this.state};
         for (let i = 0; i < data.feeds.length; i++) {
           newState.feedServices[i].updateFeedDataOnClear(data.state.updates[data.feeds[i].id]);
         }
         this.setState(newState);
-        this.forceUpdate();
       }
     });
   }
 
   componentWillMount() {
-    this.darkModeEnabled = window.location.search.indexOf('dark') !== -1;
     // document.addEventListener('visibilitychange', this.handleVisibilityChange, false);
     const store = new GistStorage(this.GetFeed());
     this.loadGist(store);
@@ -87,12 +85,12 @@ export class Main extends React.Component<IMainProps, IMainState> {
     return () => {
       feedService.displayAllLinks();
 
-      this.forceUpdate(() => { this.displayFeedOnTopOfTheScreen(id.toString()); });
+      this.forceUpdate(() => this.displayFeedOnTopOfTheScreen(id));
     };
   }
 
-  displayFeedOnTopOfTheScreen(feedId: string) {
-    const feed = document.getElementById(feedId);
+  displayFeedOnTopOfTheScreen(feedId: number) {
+    const feed = document.getElementById(feedId.toString());
     if (feed != null) {
       feed.scrollIntoView(true);
     }
@@ -103,15 +101,13 @@ export class Main extends React.Component<IMainProps, IMainState> {
     return text.split('').reduce((a, b) => { a = (a << 5) - a + b.charCodeAt(0); return a & a; }, 0);
   }
 
-  toggleFeedsIconsVisibility = () => {
-    this.displayFeeds = !this.displayFeeds;
-    this.forceUpdate();
-  }
+  toggleFeedsIconsVisibility = () => this.setState({...this.state, displayFeeds:!this.state.displayFeeds })
+  toggleTheme = () => this.setState({...this.state, darkModeEnabled:!this.state.darkModeEnabled })
 
   render() {
     if (this.state === null) {
       return (
-        <main className={this.darkModeEnabled ? 'dark' : 'light'}>
+        <main className='dark'>
           <div className="loading">
             <div>loading feeds...</div>
             <div className="spinner">&#9676;</div>
@@ -120,7 +116,7 @@ export class Main extends React.Component<IMainProps, IMainState> {
     }
 
     return (
-      <main className={this.darkModeEnabled ? 'dark' : 'light'}>
+      <main className={this.state.darkModeEnabled ? 'dark' : 'light'}>
         <div className="feeds">
           <NotificationContainer />
           {/* <div className="displayModes">
@@ -135,7 +131,7 @@ export class Main extends React.Component<IMainProps, IMainState> {
             {this.state.feedServices.map((feedService: FeedService, i: number) =>
               <Feed
                 key={feedService.feedData.id}
-                id={i}
+                id={i} // to be able to know the une just after (to put it in top of screen when clearing feed)
                 feed={feedService}
               />
             )}
@@ -143,8 +139,8 @@ export class Main extends React.Component<IMainProps, IMainState> {
           <ReadingList data={this.state.data} store={this.state.store} />
         </div>
         <div>
-        {!this.displayFeeds && <a onClick={this.toggleFeedsIconsVisibility}>Show feeds </a>}
-        {this.displayFeeds && this.state.feedServices.map((feedService: FeedService, i: number) =>
+        {!this.state.displayFeeds && <a onClick={this.toggleFeedsIconsVisibility}>Show feeds</a>}
+        {this.state.displayFeeds && this.state.feedServices.map((feedService: FeedService, i: number) =>
               <img
                 key={feedService.feedData.id}
                 src={feedService.logo}
@@ -155,6 +151,8 @@ export class Main extends React.Component<IMainProps, IMainState> {
                 className="feed-icon"
               />
             )}
+        {this.state.displayFeeds && <a onClick={this.toggleFeedsIconsVisibility}>Hide feeds</a>}
+        {<a onClick={this.toggleTheme}>Toggle theme</a>}
         </div>
       </main>
     );

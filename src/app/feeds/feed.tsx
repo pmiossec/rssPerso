@@ -4,7 +4,6 @@ import { FeedService, Link, noRefresh } from './feedService';
 import { ReadListItem } from '../storage/gistStorage';
 
 interface IFeedProps {
-  key: number;
   feed: FeedService;
   id: number;
 }
@@ -191,7 +190,25 @@ export class Feed extends React.Component<IFeedProps, IFeedState> {
           </span>
         );
       } else {
-        return <div id={this.props.id.toString()} />;
+        if (this.props.feed.error !== null)
+        {
+          return (
+            <div className="feed" id={this.props.id.toString()}>
+            <div className="title">
+              <div>
+                <img src={this.props.feed.logo} onClick={this.refreshFeed}/> &nbsp;
+                <a href={this.props.feed.webSiteUrl as string} target="_blank" rel="noreferrer" >
+                  {' '}{this.props.feed.title}
+                </a>
+              </div>
+            </div>
+            <div>{this.props.feed.error}</div>
+          </div>
+          );
+        }
+        else {
+          return <div id={this.props.id.toString()} />;
+        }
       }
     }
 
@@ -205,7 +222,7 @@ export class Feed extends React.Component<IFeedProps, IFeedState> {
             </a>|
             <a onClick={this.addToReadList(l, i)}>📑</a>]
             <a
-              href={this.unsecureUrl(l.url)}
+              href={l.url}
               target="_blank"
               rel="noreferrer"
               onClick={this.removeIfFirstOnClick(l, i)}
