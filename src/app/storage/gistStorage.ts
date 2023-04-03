@@ -1,6 +1,6 @@
 import { Voussoir } from './pareil';
 import * as axios from 'axios';
-import { NotificationManager } from 'react-notifications';
+import { toast } from 'react-toastify';
 
 export interface Gist {
   feeds: FeedData[];
@@ -118,7 +118,7 @@ export class GistStorage {
     .catch(err => {
       // tslint:disable-next-line:no-console
       console.error('Failed to load the gist.', err);
-      NotificationManager.error(`Gist loading:\n${err}`, 'Error fetching', 10000);
+      toast.error(`Gist loading:\n${err}`, { autoClose: 10000});
       return false;
     });
   }
@@ -145,7 +145,7 @@ export class GistStorage {
       .catch(err => {
         // tslint:disable-next-line:no-console
         console.error(err);
-        NotificationManager.warning('Loading data from cache...', 'Loading data', 3000);
+        toast.warning('Loading data from cache...');
         this.data = JSON.parse(localStorage.getItem('rssPerso')!) as Gist;
         return this.data;
       });
@@ -196,7 +196,7 @@ export class GistStorage {
       .catch(err => {
         // tslint:disable-next-line:no-console
         console.error('Failed to load the gist.', err);
-        NotificationManager.error(`Gist loading:\n${err}`, 'Error fetching', 10000);
+        toast.error(`Error Gist loading:\n${err}`, { autoClose: 10000 });
         return null;
       });
   }
@@ -209,7 +209,7 @@ export class GistStorage {
       .then((response: axios.AxiosResponse<Storage>) => {
         const newRevisionCount = response.data.history.length;
         if (newRevisionCount > this.data.revisionCount + 1) {
-          NotificationManager.warning('Probable data loss. Please refresh!!', 'Data lost', 3000);
+          toast.warning('Probable data loss. Please refresh!!');
         }
         var updateGist = new Date(response.data.updated_at);
         // strange value where github set in the gist not the same time than in the save response (with 1s more :()
@@ -220,11 +220,11 @@ export class GistStorage {
         this.data.readList = this.getReadingListData(response.data.files);
         // this.shouldBeSaved = false;
         this.isPushingAnUpdate = false;
-        NotificationManager.info('Save 👍', 'Update', 200);
+        toast.success('Saved!', { autoClose: 1000 });
       })
       .catch(err => {
         this.isPushingAnUpdate = false;
-        NotificationManager.error(`Save 👎:\n${err}`, 'Update', 3000);
+        toast.error(`Error on Update saved Save 👎:\n${err}`);
         // tslint:disable-next-line:no-console
         console.error('err saving state:', err);
         throw err;
@@ -271,10 +271,10 @@ export class GistStorage {
     item: ReadListItem,
     saveAlsoFeedState: boolean
   ) => {
-    NotificationManager.info('Adding to 📃', 'Reading list', 200);
+    toast.info('Adding to 📃', { autoClose: 1000 });
 
     if (this.data.readList.findIndex(i => i.url === item.url) > 0) {
-      NotificationManager.warning('Duplicate: already there...', 'Add link', 1000);
+      toast.warning('📃 Duplicate link', { autoClose: 1000 });
       return;
     }
 
@@ -286,7 +286,7 @@ export class GistStorage {
 
   public removeItemFromReadingList = (item: ReadListItem): void => {
     const msg = `Removing '${item.title}' from reading list`;
-    NotificationManager.warning(msg, 'Reading list', 1000);
+    toast.warning(`📃 ${msg}`, { autoClose: 1000 });
     var indexFound = this.data.readList.findIndex(i => {
       return i.url === item.url;
     });

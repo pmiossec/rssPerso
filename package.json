@@ -1,6 +1,7 @@
 {
   "name": "rss-perso",
   "version": "0.1.0",
+  "type": "module",
   "private": true,
   "dependencies": {
     "@types/node": "^18.11.18",
@@ -9,20 +10,21 @@
     "axios": "^1.2.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-notifications": "^1.7.4",
-    "react-scripts": "^5.0.1",
-    "typescript": "^4.9.4"
+    "react-toastify": "^9.1.2"
   },
   "devDependencies": {
+    "@vitejs/plugin-react": "^3.1.0",
     "concurrently": "^7.6.0",
-    "sass": "^1.57.1"
+    "sass": "^1.57.1",
+    "vite": "^4.2.1",
+    "vite-tsconfig-paths": "^4.0.7",
+    "typescript": "^4.9.4"
   },
   "scripts": {
-    "start": "concurrently \"npm:watch-css\" \"npm:start-ts\"",
-    "start-ts": "react-scripts start",
-    "build": "set PUBLIC_URL=.&& npm run build-css && react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
+    "start": "vite",
+    "build": "tsc && vite build",
+    "serve": "vite preview",
+    "test": "vite test",
     "build-css": "sass src/:src/",
     "watch-css": "npm run build-css && sass src/:src/ --watch"
   },

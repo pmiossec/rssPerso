@@ -1,6 +1,6 @@
 import * as axios from 'axios';
 import { FeedData, GistStorage, ReadListItem } from '../storage/gistStorage';
-import { NotificationManager } from 'react-notifications';
+import { toast } from 'react-toastify';
 
 export interface Link extends ReadListItem {
   read: boolean;
@@ -138,7 +138,7 @@ export class FeedService {
           const error = `${this.feedData.url} => Feed format not supported:` + feedFormat;
           // tslint:disable-next-line:no-console
           console.error(error);
-          NotificationManager.error(error, 'Feed format not supported', 3000);
+          toast.error('Feed format not supported:\n' + error, { autoClose: 3000 });
           this.title = error;
       }
 

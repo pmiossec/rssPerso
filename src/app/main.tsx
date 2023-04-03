@@ -3,9 +3,8 @@ import { GistStorage, Gist, FeedData } from './storage/gistStorage';
 import { FeedService } from './feeds/feedService';
 import { Feed } from './feeds/feed';
 import { ReadingList } from './readingList/readingList';
-import { NotificationContainer, NotificationManager } from 'react-notifications';
-//TODO replace by https://www.npmjs.com/package/react-notifications-component
-import 'react-notifications/lib/notifications.css';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface IMainProps { }
 interface IMainState {
@@ -62,7 +61,16 @@ export class Main extends React.Component<IMainProps, IMainState> {
         if (isUpdated) {
           window.clearInterval(this.refreshTimer);
           this.forceUpdate();
-          NotificationManager.warning('🔃 Need refresh!!', 'Updated', 1000);
+          toast.warn('🔃 Need refresh!!', {
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+            });
+          // NotificationManager.warning('🔃 Need refresh!!', 'Updated', 1000);
 
           this.loadGist(store);
         }
@@ -118,7 +126,18 @@ export class Main extends React.Component<IMainProps, IMainState> {
     return (
       <main className={this.state.darkModeEnabled ? 'dark' : 'light'}>
         <div className="feeds">
-          <NotificationContainer />
+          <ToastContainer 
+            position="bottom-left"
+            autoClose={1000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="dark" />
+          {/* <NotificationContainer /> */}
           {/* <div className="displayModes">
           <a onClick={this.clearAll}>Clear All</a> / <a onClick={this.displayAll}>Show All</a>
         </div> */}
