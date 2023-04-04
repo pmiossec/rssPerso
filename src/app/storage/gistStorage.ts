@@ -220,7 +220,7 @@ export class GistStorage {
         this.data.readList = this.getReadingListData(response.data.files);
         // this.shouldBeSaved = false;
         this.isPushingAnUpdate = false;
-        toast.success('Saved!', { autoClose: 1000 });
+        toast.success('Saved!', { autoClose: 1000, hideProgressBar: true });
       })
       .catch(err => {
         this.isPushingAnUpdate = false;
