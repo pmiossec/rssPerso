@@ -34,6 +34,8 @@ export interface ReadListItem {
   title: string;
   url: string;
   publicationDate: Date;
+  description: string;
+  other: string | undefined;
 }
 
 interface GistFileDescription {
@@ -179,7 +181,9 @@ export class GistStorage {
           idFeed: i.idFeed,
           title: i.title,
           url: i.url,
-          publicationDate: new Date(i.publicationDate)
+          publicationDate: new Date(i.publicationDate),
+          description: i.description,
+          other: i.other
         };
       }));
   }

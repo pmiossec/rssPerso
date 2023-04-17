@@ -202,10 +202,12 @@ export class FeedService {
           ? this.getElementContentByTagName(item, 'title')
           : 'No tile found :(',
         publicationDate: this.getLinkRssDate(item),
+        description: this.getElementContentByTagName(item, 'description'),
         read: false,
         iconUrl: this.feedData.icon,
         feedName: this.feedData.name,
-        idFeed: this.feedData.id
+        idFeed: this.feedData.id,
+        other: this.getElementContentByTagName(item, 'category')
       };
 
       this.allLinks.push(link);
@@ -299,6 +301,8 @@ export class FeedService {
         url: linkFound.getAttribute('href') as string,
         title: this.getElementContentByTagName(item, 'title'),
         publicationDate: this.getLinkAtomDate(item),
+        description: this.getElementContentByTagName(item, 'description'),
+        other:this.getElementContentByTagName(item, 'category'),
         read: false,
         iconUrl: this.feedData.icon,
         feedName: this.feedData.name,

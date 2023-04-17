@@ -102,8 +102,7 @@ export class Feed extends React.Component<IFeedProps, IFeedState> {
           this.clearFeed(item.publicationDate);
           this.forceUpdate();
         }
-      },
-                 200);
+      }, 200);
   };
   }
 
@@ -111,45 +110,77 @@ export class Feed extends React.Component<IFeedProps, IFeedState> {
     this.hiddenTextArea.innerHTML = encodedString;
     return this.hiddenTextArea.value;
   }
+  
+  // https://emojiterra.com/fr/activites/
+  readonly emojies = [
+    ['Equipe de France', '🇫🇷‍'],
+    ['Jeux olympiques', '🏅'],
+    ['Alpinisme', '🧗'],
+    ['Tennis', '🎾'],
+    ['NBA', '🏀🇺🇸'],
+    ['Basket', '🏀'],
+    ['Ligue 1', '⚽🇫🇷'],
+    ['Liga', '⚽🇪🇸'],
+    ['Football', '⚽'],
+    ['Foot', '⚽'],
+    ['Handball', '🤾'],
+    ['Hand', '🤾'],
+    ['Rugby', '🏉'],
+    ['Top 14', '🏉🇫🇷'],
+    ['Golf', '⛳'],
+    ['Cyclisme', '🚴‍'],
+    ['Sports US', '🇺🇸'],
+    ['Sports d\'hiver', '❄️'],
+    ['Judo', '🥋'],
+    ['Volley', '🏐'],
+    ['Boxe', '🥊'],
+    ['Voile', '⛵'],
+    ['Equitation', '🏇🏻'],
+    ['Natation', '🏊🏻'],
+    ['Escrime', '🤺'],
+    ['Athlétisme', '🏃‍'],
+    ['Athlé', '🏃‍'],
+    ['Auto/Moto', '🚗'],
+    ['Auto', '🚗'],
+    ['Moto', '🏍️'],
+    ['F1', '🏎'],
+    ['Hockey', '🏒'],
+    ['Baseball', '⚾'],
+    ['Ski alpin', '🎿'],
+    ['Equitation', '🏇'],
+    ['Rallycross', '🚗🌄'],
+    ['Rallye', '🚗🌄'],
+    ['Esport', '💻'],
+    ['France', '🇫🇷'],
+    ['Italie', '🇮🇹'],
+    ['EN DIRECT', '▶️'],
+    ['Tous Sports', '🎽'],
+  ];
 
   private replaceInTitle = (title: string) => {
-    // https://emojiterra.com/fr/activites/
-    return this.decodeEntities(title)
-      .replace('  ', ' ')
-      .replace('Equipe de France', '🇫🇷‍')
-      .replace('Jeux olympiques', '🏅')
-      .replace('Tennis', '🎾')
-      .replace('Basket', '🏀')
-      .replace('Football', '⚽')
-      .replace('Handball', '🤾')
-      .replace('Hand', '🤾')
-      .replace('Rugby', '🏉')
-      .replace('Golf', '⛳')
-      .replace('Cyclisme', '🚴‍')
-      .replace('Sports US', '🇺🇸')
-      .replace('Sports d\'hiver', '❄️')
-      .replace('Judo', '🥋')
-      .replace('Volley', '🏐')
-      .replace('Boxe', '🥊')
-      .replace('Voile', '⛵')
-      .replace('Equitation', '🏇🏻')
-      .replace('Natation', '🏊🏻')
-      .replace('Escrime', '🤺')
-      .replace('Athlétisme', '🏃‍')
-      .replace('Athlé', '🏃‍')
-      .replace('Auto/Moto', '🚗')
-      .replace('Auto', '🚗')
-      .replace('Moto', '🏍️')
-      .replace('F1', '🏎')
-      // .replace('Hockey', '🏎')
-      .replace('Baseball', '⚾')
-      .replace('Ski alpin', '🎿')
-      .replace('Rallye', '🚗🌄')
-      .replace('Equitation', '🏇')
-      .replace('Esport', '💻')
-      .replace('NBA', '🏀🇺🇸')
-      .replace('France', '🇫🇷')
-      ;
+    let enhancedTitle = this.decodeEntities(title)
+      .replace('  ', ' ');
+    
+    for(let i = 0; i < this.emojies.length; i++)
+    {
+      enhancedTitle = enhancedTitle.replace(this.emojies[i][0], this.emojies[i][1]);
+    }
+    
+    return enhancedTitle;
+  }
+
+  private enhanceWithCategory(title: string, other: string | undefined): string {
+    if (other === undefined || other === '') {
+      return title;
+    }
+
+    for(let i = 0; i < this.emojies.length; i++)
+    {
+      if (other.indexOf(this.emojies[i][0]) !== -1) {
+        return `${this.emojies[i][1]}${title}`;
+      }
+    }    
+    return title;
   }
 
   render() {
@@ -226,8 +257,9 @@ export class Feed extends React.Component<IFeedProps, IFeedState> {
               target="_blank"
               rel="noreferrer"
               onClick={this.removeIfFirstOnClick(l, i)}
+              title={l.description}
             >
-              {this.props.feed.feedData.enhance === true ? this.replaceInTitle(l.title) : l.title}
+              {this.props.feed.feedData.enhance === true ? this.enhanceWithCategory(l.title, l.other) : l.title}
             </a>
           </div>
         )}
