@@ -147,6 +147,8 @@ export class Feed extends React.Component<IFeedProps, IFeedState> {
     ['Hockey', '🏒'],
     ['Baseball', '⚾'],
     ['Ski alpin', '🎿'],
+    ['Ski-alpinisme', '🎿'],
+    ['Médias', '📺'],
     ['Equitation', '🏇'],
     ['Rallycross', '🚗🌄'],
     ['Rallye', '🚗🌄'],
