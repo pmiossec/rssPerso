@@ -6,6 +6,7 @@ import { ReadListItem } from '../storage/gistStorage';
 interface IFeedProps {
   feed: FeedService;
   id: number;
+  debug: boolean;
 }
 
 interface IFeedState { }
@@ -280,6 +281,7 @@ export class Feed extends React.Component<IFeedProps, IFeedState> {
             <a href={this.props.feed.webSiteUrl as string} target="_blank" rel="noreferrer" >
               {' '}{this.props.feed.title}
             </a>
+            {this.props.debug && <a href={this.props.feed.feedData.url} target="_blank" rel="noreferrer" >⚙️</a>}
           </div>
           <div>
             {options}

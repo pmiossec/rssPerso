@@ -13,6 +13,7 @@ interface IMainState {
   feedServices: FeedService[];
   displayFeeds: boolean;
   darkModeEnabled: boolean;
+  debug: boolean;
 }
 
 export class Main extends React.Component<IMainProps, IMainState> {
@@ -110,6 +111,7 @@ export class Main extends React.Component<IMainProps, IMainState> {
 
   toggleFeedsIconsVisibility = () => this.setState({...this.state, displayFeeds:!this.state.displayFeeds })
   toggleTheme = () => this.setState({...this.state, darkModeEnabled:!this.state.darkModeEnabled })
+  enableDebug = () => this.setState({...this.state, debug:!this.state.debug })
 
   render() {
     if (this.state === null) {
@@ -152,13 +154,13 @@ export class Main extends React.Component<IMainProps, IMainState> {
                 key={feedService.feedData.id}
                 id={i} // to be able to know the une just after (to put it in top of screen when clearing feed)
                 feed={feedService}
+                debug={this.state.debug}
               />
             )}
           </div>
           <ReadingList data={this.state.data} store={this.state.store} />
         </div>
-        <div>
-        {!this.state.displayFeeds && <a onClick={this.toggleFeedsIconsVisibility}>Show feeds</a>}
+        <div className='settings'>
         {this.state.displayFeeds && this.state.feedServices.map((feedService: FeedService, i: number) =>
               <img
                 key={feedService.feedData.id}
@@ -170,8 +172,9 @@ export class Main extends React.Component<IMainProps, IMainState> {
                 className="feed-icon"
               />
             )}
-        {this.state.displayFeeds && <a onClick={this.toggleFeedsIconsVisibility}>Hide feeds</a>}
-        {<a onClick={this.toggleTheme}>Toggle theme</a>}
+        <a onClick={this.toggleFeedsIconsVisibility}>{this.state.displayFeeds ? "Show feeds" : "Hide feeds"}</a> &nbsp;
+        <a onClick={this.toggleTheme}>Toggle theme</a> &nbsp;
+        <a onClick={this.enableDebug}>Enable debug</a>
         </div>
       </main>
     );
