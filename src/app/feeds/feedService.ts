@@ -57,6 +57,7 @@ export class FeedService {
   private isOrderNewerFirst = false;
   private shouldDisplayAllLinks: boolean = false;
   public refreshInterval: number = -1;
+  public isYoutube: boolean = false;
 
   constructor(
     public feedData: FeedData,
@@ -67,6 +68,8 @@ export class FeedService {
     this.title = feedData.name;
     this.logo = feedData.icon;
     this.httpProtocol = window.location.protocol;
+    this.isYoutube = feedData.url.startsWith("https://www.youtube.com");
+    
     if (this.offsetDate !== null) {
       this.restoreInitialClearDate(this.offsetDate);
     }

@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as Helper from '../helper';
 import { FeedService, Link, noRefresh } from './feedService';
 import { ReadListItem } from '../storage/gistStorage';
+import YoutubeControls from './YoutubeControls';
 
 interface IFeedProps {
   feed: FeedService;
@@ -264,6 +265,7 @@ export class Feed extends React.Component<IFeedProps, IFeedState> {
             >
               {this.props.feed.feedData.enhance === true ? this.enhanceWithCategory(l.title, l.other) : l.title}
             </a>
+            {this.props.feed.isYoutube && <YoutubeControls url={l.url}  />}
           </div>
         )}
       </div>
