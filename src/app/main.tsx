@@ -1,10 +1,11 @@
-import * as React from 'react';
+import { useEffect, useState} from 'react';
 import { GistStorage, Gist, FeedData } from './storage/gistStorage';
 import { FeedService } from './feeds/feedService';
 import { Feed } from './feeds/feed';
 import { ReadingList } from './readingList/readingList';
 import { ToastContainer, toast, Zoom } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import useLocalStorage from 'use-local-storage';
 
 interface IMainProps { }
 interface IMainState {
@@ -17,10 +18,13 @@ function Main(props :IMainProps) {
   console.log("Loading component...");
 
   let refreshTimer: number = -1;
-  const [state, setState] = React.useState<IMainState|null>(null);
-  const [debug, setDebug] = React.useState<boolean>(false);
-  const [displayFeeds, setDisplayFeeds] = React.useState<boolean>(false);
-  const [darkModeEnabled, setDarkModeEnabled] = React.useState<boolean>(window.location.search.indexOf('dark') !== -1);
+  const [state, setState] = useState<IMainState|null>(null);
+  const [debug, setDebug] = useState<boolean>(false);
+  const [displayFeeds, setDisplayFeeds] = useState<boolean>(false);
+  const [darkModeEnabled, setDarkModeEnabled] = useLocalStorage<boolean>("darkModeEnabled", true);
+  const [bearerToken, setBearerToken] = useLocalStorage<string|undefined>("bearerToken", undefined);
+  const [bearerTokenTemp, setBearerTokenTemp] = useState<string|undefined>(undefined);
+
   function GetFeed(): string {
     const feeds: string[] = [
       '1d800438c2edee3e07e547a3d4d20ef1' , // Philippe
@@ -55,10 +59,15 @@ function Main(props :IMainProps) {
     });
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
+
+    if (bearerToken === undefined) {
+      return;
+    }
+
     // document.addEventListener('visibilitychange', this.handleVisibilityChange, false);
     console.log("Loading gist...");
-    const store = new GistStorage(GetFeed());
+    const store = new GistStorage(GetFeed(), bearerToken);
     loadGist(store);
 
     const refreshTimer = window.setInterval(
@@ -112,6 +121,21 @@ function Main(props :IMainProps) {
     // tslint:disable-next-line:no-bitwise
     return text.split('').reduce((a, b) => { a = (a << 5) - a + b.charCodeAt(0); return a & a; }, 0);
   }
+
+  const saveBearerToken = () => {
+    if (bearerTokenTemp && bearerTokenTemp.length === 40 && bearerTokenTemp.startsWith("ghp_")) {
+      setBearerToken(bearerTokenTemp);
+    }
+  }
+
+  if (bearerToken === undefined) {
+    return (
+      <section>
+        <label>gist token: <input type="text" onChange={e => setBearerTokenTemp(e.target.value)} /></label>
+        <button onClick={saveBearerToken}>Save token</button>
+      </section>);
+  }
+
 
   if (state === null || state.store === undefined) {
     return (

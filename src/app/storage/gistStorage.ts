@@ -1,4 +1,3 @@
-import { Voussoir } from './pareil';
 import * as axios from 'axios';
 import { toast } from 'react-toastify';
 
@@ -94,12 +93,10 @@ export class GistStorage {
   private gistId: string;
   private isPushingAnUpdate: boolean = false;
 
-  constructor(gistId: string) {
+  constructor(gistId: string, bearerToken: string) {
     this.gistId = gistId;
     this.gistUrl = `${GithubApiUrl}gists/${gistId}`;
-    axios.default.defaults.headers.common.Authorization = atob('QmVhcmVyIA==')
-                                                           + atob('Z2hwXzcyYk9sOXB4RVlWWU5ndn'
-                                                           + Voussoir);
+    axios.default.defaults.headers.common.Authorization = "Bearer " + bearerToken;
   }
 
   public isGistUpdated = (): Promise<boolean> => {
