@@ -123,8 +123,10 @@ function Main(props :IMainProps) {
   }
 
   const saveBearerToken = () => {
-    if (bearerTokenTemp && bearerTokenTemp.length === 40 && bearerTokenTemp.startsWith("ghp_")) {
-      setBearerToken(bearerTokenTemp);
+    if (bearerTokenTemp
+      && bearerTokenTemp.length >= 40 
+      && (bearerTokenTemp.startsWith("ghp_") || bearerTokenTemp.startsWith("github_pat_"))) {
+        setBearerToken(bearerTokenTemp);
     }
   }
 
