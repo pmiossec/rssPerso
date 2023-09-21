@@ -34,6 +34,7 @@ const hour = 60 * minute;
 const oneDayInterval = 24 * hour;
 const maxRefreshInterval = 30 * minute;
 const minRefreshInterval = 10 * minute;
+const htmlStipperDomElement = document.createElement('div');
 
 export class FeedService {
   public httpProtocol: string;
@@ -196,7 +197,7 @@ export class FeedService {
           ? this.getElementContentByTagName(item, 'title')
           : 'No tile found :(',
         publicationDate: this.getLinkRssDate(item),
-        description: this.getElementContentByTagName(item, 'description'),
+        description: this.stripHtml(this.getElementContentByTagName(item, 'description')),
         read: false,
         iconUrl: this.feedData.icon,
         feedName: this.feedData.name,
@@ -265,6 +266,11 @@ export class FeedService {
   //   return url; // .replace('https://', 'http://');
   // }
 
+  private stripHtml(htmlContent: string): string {
+    htmlStipperDomElement.innerHTML = htmlContent;
+    return htmlStipperDomElement.textContent || htmlStipperDomElement.innerText;
+  }
+  
   private manageAtomFeed(xmlDoc: HTMLElement): void {
     // console.log(`Processing Atom feed ( ${this.url} )...`);
     this.title = this.getElementContentByTagName(xmlDoc, 'title');
@@ -295,7 +301,7 @@ export class FeedService {
         url: linkFound.getAttribute('href') as string,
         title: this.getElementContentByTagName(item, 'title'),
         publicationDate: this.getLinkAtomDate(item),
-        description: this.getElementContentByTagName(item, 'description'),
+        description: this.stripHtml(this.getElementContentByTagName(item, 'description')),
         other:this.getElementContentByTagName(item, 'category'),
         read: false,
         iconUrl: this.feedData.icon,
