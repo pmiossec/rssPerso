@@ -74,21 +74,21 @@ function Main(props :IMainProps) {
       () => store.isGistUpdated().then(isUpdated => {
         if (isUpdated) {
           window.clearInterval(refreshTimer);
-          // forceUpdate();
-          toast.warn('🔃 Need refresh!!', {
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "dark",
-            });
+          location.reload();
+          // toast.warn('🔃 Need refresh!!', {
+          //   autoClose: 3000,
+          //   hideProgressBar: false,
+          //   closeOnClick: true,
+          //   pauseOnHover: true,
+          //   draggable: true,
+          //   progress: undefined,
+          //   theme: "dark",
+          //   });
 
-          loadGist(store);
+          // loadGist(store);
         }
       }),
-      1000 * 60
+      60_000
     );
   }, []);
 
