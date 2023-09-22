@@ -29,7 +29,7 @@ const proxyHandler: CorsProxyHandler = {
   };
 
 export const noRefresh = -1;
-const minute = 60 * 1000;
+const minute = 60_000;
 const hour = 60 * minute;
 const oneDayInterval = 24 * hour;
 const maxRefreshInterval = 30 * minute;

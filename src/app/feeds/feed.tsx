@@ -17,12 +17,13 @@ export class Feed extends React.Component<IFeedProps, IFeedState> {
   hiddenTextArea: HTMLTextAreaElement = document.createElement('textarea');
   timerId: number = -1;
 
-  componentWillMount(): void {
+  componentDidMount(): void {
     this.loadFeed().then(() => {
       if (this.props.feed.refreshInterval === noRefresh) {
         this.timerId = -1;
         return;
       }
+      
       this.timerId = window.setInterval(
         () => this.loadFeed(),
         this.props.feed.refreshInterval
