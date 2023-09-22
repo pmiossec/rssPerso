@@ -174,3 +174,15 @@ img.feed-icon {
 .invidious {
 	vertical-align: bottom;
 }
+
+@media (min-width: 1250px) {
+  .youtube {
+    display: none;
+  }
+
+  .link:hover {
+    & .youtube {
+      display: inline;
+    }
+  }
+}

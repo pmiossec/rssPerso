@@ -11,8 +11,8 @@ export default ({url}: YoutubeContolsProps): JSX.Element => {
     const copyUrlToClipboard = () => navigator.clipboard.writeText(url);
     
     return (<>
-        <a onClick={copyUrlToClipboard}>📋</a>
-        <a href={convertToInvidiousUrl(url)} target="_blank" title="Watch on Invidious (privacy friendly!)">
+        <a onClick={copyUrlToClipboard} className="youtube">📋</a>
+        <a href={convertToInvidiousUrl(url)} target="_blank" title="Watch on Invidious (privacy friendly!)" className="youtube">
             <img src="invidious.png" alt="Watch on invidious" className="invidious" />
         </a>
     </>);
