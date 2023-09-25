@@ -257,7 +257,7 @@ export class Feed extends React.Component<IFeedProps, IFeedState> {
               {Helper.DateFormatter.formatDate(l.publicationDate, now)}
             </a>|
             <a onClick={this.addToReadList(l, i)}>📑</a>]
-            <a
+            {!this.props.feed.isYoutube && <a
               href={l.url}
               target="_blank"
               rel="noreferrer"
@@ -266,7 +266,8 @@ export class Feed extends React.Component<IFeedProps, IFeedState> {
             >
               {this.props.feed.feedData.enhance === true ? this.enhanceWithCategory(l.title, l.other) : l.title}
             </a>
-            {this.props.feed.isYoutube && <YoutubeControls url={l.url}  />}
+            }
+            {this.props.feed.isYoutube && <YoutubeControls url={l.url} title={l.title} />}
           </div>
         )}
       </div>
