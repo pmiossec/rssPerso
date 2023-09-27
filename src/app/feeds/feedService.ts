@@ -262,10 +262,6 @@ export class FeedService {
     return null;
   }
 
-  // private formatWebsiteUrl(url: string): string {
-  //   return url; // .replace('https://', 'http://');
-  // }
-
   private stripHtml(htmlContent: string): string {
     htmlStipperDomElement.innerHTML = htmlContent;
     return htmlStipperDomElement.textContent || htmlStipperDomElement.innerText;

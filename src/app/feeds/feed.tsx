@@ -79,13 +79,6 @@ export class Feed extends React.Component<IFeedProps, IFeedState> {
     this.forceUpdate();
   }
 
-  openAll = (): void => {
-    this.props.feed.getLinksToDisplay().forEach(element => {
-      window.open(element.url, '_blank', 'noreferrer');
-    });
-    this.clearAllFeed();
-  }
-
   addToReadList = (item: ReadListItem, index: number) => {
     return () => {
       const removingItem = index === 0;
@@ -106,11 +99,6 @@ export class Feed extends React.Component<IFeedProps, IFeedState> {
         }
       }, 200);
   };
-  }
-
-  private decodeEntities = (encodedString: string) => {
-    this.hiddenTextArea.innerHTML = encodedString;
-    return this.hiddenTextArea.value;
   }
   
   // https://emojiterra.com/fr/activites/
@@ -161,18 +149,6 @@ export class Feed extends React.Component<IFeedProps, IFeedState> {
     ['tous sports', '🎽'],
   ];
 
-  private replaceInTitle = (title: string) => {
-    let enhancedTitle = this.decodeEntities(title)
-      .replace('  ', ' ');
-    
-    for(let i = 0; i < this.emojies.length; i++)
-    {
-      enhancedTitle = enhancedTitle.replace(this.emojies[i][0], this.emojies[i][1]);
-    }
-    
-    return enhancedTitle;
-  }
-
   private enhanceWithCategory(title: string, other: string | undefined): string {
     if (other === undefined || other === '') {
       return title;
@@ -200,18 +176,10 @@ export class Feed extends React.Component<IFeedProps, IFeedState> {
               {linksToDisplay.length}
             </a>
           </div>
-          {/* <div className="text-badge refresh" onClick={this.refreshFeed}>
-            <a> ⟳
-            </a>
-          </div> */}
           {!this.props.feed.isDisplayingAllLinks() &&
             <div className="text-badge" onClick={this.displayAll}>
               <a>All</a>
             </div>}
-          {/* {linksToDisplay.length !== 0 &&
-            <div className="text-badge open" onClick={this.openAll}>
-              <a>Open All</a>
-            </div>} */}
         </span>
       );
     } else {
