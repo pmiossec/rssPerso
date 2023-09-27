@@ -2,7 +2,7 @@ import { useEffect, useState} from 'react';
 import { GistStorage, Gist, FeedData } from './storage/gistStorage';
 import { FeedService } from './feeds/feedService';
 import { Feed } from './feeds/feed';
-import { ReadingList } from './readingList/readingList';
+import ReadingList from './readingList/readingList';
 import { ToastContainer, toast, Zoom } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import useLocalStorage from 'use-local-storage';
@@ -183,7 +183,7 @@ function Main(props :IMainProps) {
             />
           )}
         </div>
-        <ReadingList data={state.data} store={state.store} />
+        <ReadingList readList={state.data?.readList} feeds={state.data?.feeds} store={state.store} />
       </div>
       <div className='settings'>
       {displayFeeds && state.feedServices.map((feedService: FeedService, i: number) =>

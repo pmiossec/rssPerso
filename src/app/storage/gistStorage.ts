@@ -319,7 +319,7 @@ export class GistStorage {
     localStorage.setItem('rssPerso', JSON.stringify(this.data, null, '\t'));
   }
 
-  public sortListByDate = (readList: ReadListItem[]) => {
+  private sortListByDate = (readList: ReadListItem[]) => {
     return readList.sort((i1, i2) => {
       return (
         i2.publicationDate.getTime() -
@@ -328,12 +328,18 @@ export class GistStorage {
     });
   }
 
-  public sortListByFeed = (readList: ReadListItem[]) => {
+  private sortListByFeed = (readList: ReadListItem[]) => {
     return readList.sort((i1, i2) => {
       if (i1.idFeed === i2.idFeed) {
         return i2.publicationDate.getTime() - i1.publicationDate.getTime();
       }
       return i1.idFeed - i2.idFeed;
     });
+  }
+
+  public changeSort = (sortByDate: boolean) => {
+    this.data.readList = sortByDate
+      ? this.sortListByDate(this.data.readList)
+      : this.sortListByFeed(this.data.readList);
   }
 }
