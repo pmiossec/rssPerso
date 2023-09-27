@@ -136,6 +136,7 @@ export class Feed extends React.Component<IFeedProps, IFeedState> {
     ['rallycross', '🚕🏔️'],
     ['rallye', '🚕🏔️'],
     ['f1', '🏎'],
+    ['formule e', '🏎'],
     ['hockey', '🏒'],
     ['baseball', '⚾'],
     ['ski alpin', '🎿'],
@@ -145,7 +146,12 @@ export class Feed extends React.Component<IFeedProps, IFeedState> {
     ['esport', '💻'],
     ['france', '🇫🇷'],
     ['italie', '🇮🇹'],
+    ['espagne', '🇪🇸'],
     ['en direct', '▶️'],
+    ['coupe du monde', '🏆🌍'],
+    ['autres sports', '❔'],
+    ['podcast', '🎙️'],
+    ['transferts', '🔃'],
     ['tous sports', '🎽'],
   ];
 
