@@ -13,7 +13,6 @@ interface IFeedProps {
 interface IFeedState { }
 
 export class Feed extends React.Component<IFeedProps, IFeedState> {
-  shouldDisplayEmptyFeeds: boolean = false;
   hiddenTextArea: HTMLTextAreaElement = document.createElement('textarea');
   timerId: number = -1;
 
@@ -216,35 +215,24 @@ export class Feed extends React.Component<IFeedProps, IFeedState> {
         </span>
       );
     } else {
-      if (this.shouldDisplayEmptyFeeds) {
-        options = (
-          <span>
-            <div className="text-badge" onClick={this.displayAll}>
-              <a>All</a>{'  '}
-            </div>{' '}
-            - Nothing new :(
-          </span>
-        );
-      } else {
-        if (this.props.feed.error !== null)
-        {
-          return (
-            <div className="feed" id={this.props.id.toString()}>
-            <div className="title">
-              <div>
-                <img src={this.props.feed.logo} onClick={this.refreshFeed}/> &nbsp;
-                <a href={this.props.feed.webSiteUrl as string} target="_blank" rel="noreferrer" >
-                  {' '}{this.props.feed.title}
-                </a>
-              </div>
+      if (this.props.feed.error !== null)
+      {
+        return (
+          <div className="feed" id={this.props.id.toString()}>
+          <div className="title">
+            <div>
+              <img src={this.props.feed.logo} onClick={this.refreshFeed}/> &nbsp;
+              <a href={this.props.feed.webSiteUrl as string} target="_blank" rel="noreferrer" >
+                {' '}{this.props.feed.title}
+              </a>
             </div>
-            <div>{this.props.feed.error}<a href={this.props.feed.feedData.url} target="_blank" rel="noreferrer" >⚙️</a></div>
           </div>
-          );
-        }
-        else {
-          return <div id={this.props.id.toString()} />;
-        }
+          <div>{this.props.feed.error}<a href={this.props.feed.feedData.url} target="_blank" rel="noreferrer" >⚙️</a></div>
+        </div>
+        );
+      }
+      else {
+        return <div id={this.props.id.toString()} />;
       }
     }
 
