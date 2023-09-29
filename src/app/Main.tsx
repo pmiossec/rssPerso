@@ -9,7 +9,7 @@ import useLocalStorage from 'use-local-storage';
 
 interface IMainState {
   data: Gist;
-  store: GistStorage | undefined;
+  store: GistStorage;
   feedServices: FeedService[];
 }
 
@@ -134,7 +134,7 @@ function Main() {
   }
 
 
-  if (state === null || state.store === undefined) {
+  if (state === null) {
     return (
       <main className='dark'>
         <div className="loading">
