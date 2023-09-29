@@ -20,6 +20,7 @@ function Main() {
   const [darkModeEnabled, setDarkModeEnabled] = useLocalStorage<boolean>("darkModeEnabled", true);
   const [bearerToken, setBearerToken] = useLocalStorage<string|undefined>("bearerToken", undefined);
   const [bearerTokenTemp, setBearerTokenTemp] = useState<string|undefined>(undefined);
+  const [newFeedUrl, setNewFeedUrl] = useState<string>('');
 
   function GetFeed(): string {
     const feeds: string[] = [
@@ -144,6 +145,23 @@ function Main() {
       </main>);
   }
 
+  async function addNewFeed(): Promise<void> {
+    if (!newFeedUrl || !state) {
+      console.error("config not satisfying");
+      return;
+    }
+
+    var service = new FeedService({
+      id: 1+ Math.max(...state.data.feeds.map(f => +f.id)),
+      name: '',
+      url: newFeedUrl,
+      icon: ''
+}, new Date(2000, 1, 1), state.store);
+    await service.loadFeedContent();
+    console.log("Newfeed", service.feedData );
+    state.store.addNewFeed(service.feedData);
+  }
+
   return (
     <main className={darkModeEnabled ? 'dark' : 'light'}>
       <div className="feeds">
@@ -196,6 +214,10 @@ function Main() {
       <a onClick={() => setDarkModeEnabled(!darkModeEnabled)}>Toggle theme</a> &nbsp;
       <a onClick={() => setDebug(!debug)}>Enable debug</a>
       </div>
+      <section>
+        <label htmlFor="newFeedUrl">Feed Url</label>
+        <input type="text" id="newFeedUrl" onChange={e => setNewFeedUrl(e.target.value)} />
+        <button onClick={() => addNewFeed()}>Add</button></section>
     </main>
   );
 }

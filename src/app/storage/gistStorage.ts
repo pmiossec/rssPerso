@@ -315,6 +315,18 @@ export class GistStorage {
 
   public couldBeRestored = () => this.lastItemRemoved != null;
 
+  public async addNewFeed(feedData: FeedData): Promise<void> {
+
+    this.data.feeds.push(feedData);
+
+    await this.saveFileToGist({
+      description: `Add new feed ${feedData.name} / ${feedData.url}`,
+      files: {
+        [FeedFileKey]: { content: JSON.stringify({feeds: this.data.feeds}, null, '\t') }
+      }
+    });
+  }
+
   private saveDataInLocalStorage = () => {
     localStorage.setItem('rssPerso', JSON.stringify(this.data, null, '\t'));
   }

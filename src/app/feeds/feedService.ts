@@ -143,6 +143,16 @@ export class FeedService {
       if (!this.title) {
         this.title = this.feedData.url;
       }
+
+      if (!this.feedData.name) {
+        this.feedData.name = this.title;
+      }
+
+      if (!this.feedData.icon) {
+        this.feedData.icon = this.logo;
+      }
+
+
     } catch (ex) {
       this.title = `${this.feedData.url} Error loading :( Error: ${ex}`;
     }
@@ -181,6 +191,17 @@ export class FeedService {
     const channel = this.getElementByTagName(xmlDoc, 'channel');
     if (channel) {
       this.webSiteUrl = this.getElementContentByTagName(channel, 'link');
+      if (!this.title) {
+        this.title = this.getElementContentByTagName(channel, 'title');
+      }
+    }
+
+    if (!this.logo) {
+      //TODO: from content
+      // this.logo = this.getElementContentByTagName(xmlDoc, 'icon');
+      if (!this.logo && this.webSiteUrl) {
+        this.logo = this.webSiteUrl + '/favicon.ico';
+      }
     }
 
     const items = xmlDoc.getElementsByTagName('item');
@@ -268,8 +289,17 @@ export class FeedService {
   
   private manageAtomFeed(xmlDoc: HTMLElement): void {
     // console.log(`Processing Atom feed ( ${this.url} )...`);
-    this.title = this.getElementContentByTagName(xmlDoc, 'title');
-    // this.logo = this.getElementContentByTagName(xmlDoc, 'icon');
+    if(!this.title) {
+      this.title = this.getElementContentByTagName(xmlDoc, 'title');
+    }
+    if(!this.logo) {
+      this.logo = this.getElementContentByTagName(xmlDoc, 'icon');
+      if (!this.logo && this.webSiteUrl) {
+        this.logo = this.webSiteUrl + '/favicon.ico';
+      }
+    }
+
+
     const linksWebSite = xmlDoc.getElementsByTagName('link');
     for (let iLinks = 0; iLinks < linksWebSite.length; iLinks++) {
       const tag = linksWebSite.item(iLinks);
@@ -278,9 +308,7 @@ export class FeedService {
         break;
       }
     }
-    // if (!this.logo && this.webSiteUrl) {
-    //   this.logo = this.formatWebsiteUrl(this.webSiteUrl) + '/favicon.ico';
-    // }
+
     const items = xmlDoc.getElementsByTagName('entry');
     for (let iEntries = 0; iEntries < items.length; iEntries++) {
       const item = items.item(iEntries);
