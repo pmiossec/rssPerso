@@ -20,7 +20,7 @@ function Main(props :IMainProps) {
   let refreshTimer: number = -1;
   const [state, setState] = useState<IMainState|null>(null);
   const [debug, setDebug] = useState<boolean>(false);
-  const [displayFeeds, setDisplayFeeds] = useState<boolean>(false);
+  const [feedsDisplayed, setFeedsDisplayed] = useState<boolean>(false);
   const [darkModeEnabled, setDarkModeEnabled] = useLocalStorage<boolean>("darkModeEnabled", true);
   const [bearerToken, setBearerToken] = useLocalStorage<string|undefined>("bearerToken", undefined);
   const [bearerTokenTemp, setBearerTokenTemp] = useState<string|undefined>(undefined);
@@ -186,7 +186,7 @@ function Main(props :IMainProps) {
         <ReadingList data={state.data} store={state.store} />
       </div>
       <div className='settings'>
-      {displayFeeds && state.feedServices.map((feedService: FeedService, i: number) =>
+      {feedsDisplayed && state.feedServices.map((feedService: FeedService, i: number) =>
             <img
               key={feedService.feedData.id}
               src={feedService.logo}
@@ -197,7 +197,7 @@ function Main(props :IMainProps) {
               className="feed-icon"
             />
           )}
-      <a onClick={() => setDisplayFeeds(!displayFeeds)}>{displayFeeds ? "Show feeds" : "Hide feeds"}</a> &nbsp;
+      <a onClick={() => setFeedsDisplayed(!feedsDisplayed)}>{feedsDisplayed ? "Hide feeds" : "Show feeds"}</a> &nbsp;
       <a onClick={() => setDarkModeEnabled(!darkModeEnabled)}>Toggle theme</a> &nbsp;
       <a onClick={() => setDebug(!debug)}>Enable debug</a>
       </div>
