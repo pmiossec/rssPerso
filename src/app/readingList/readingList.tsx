@@ -51,7 +51,7 @@ export class ReadingList extends React.Component<
   }
 
   render() {
-    var readItems;
+    let readItems;
     if (!this.props.data) {
       readItems = <div>loading...</div>;
     } else {

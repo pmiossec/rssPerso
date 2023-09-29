@@ -118,7 +118,7 @@ export class FeedService {
     this.links = [];
     const parser = new DOMParser();
     try {
-      var content = proxyHandler.responseHandler(response.data);
+      const content = proxyHandler.responseHandler(response.data);
       const xmlDoc = parser.parseFromString(content, 'text/xml');
       const feedFormat = xmlDoc.documentElement.tagName;
       switch (feedFormat) {
@@ -186,12 +186,13 @@ export class FeedService {
     }
 
     const items = xmlDoc.getElementsByTagName('item');
-    for (var iItems = 0; iItems < items.length; iItems++) {
+    for (let iItems = 0; iItems < items.length; iItems++) {
       const item = items.item(iItems);
       if (!item) {
         continue;
       }
-      var link = {
+
+      const link = {
         url: this.getElementContentByTagName(item, 'link'),
         title: item
           ? this.getElementContentByTagName(item, 'title')
@@ -219,7 +220,7 @@ export class FeedService {
   }
 
   private getLinkRssDate(element: Element): Date {
-    var publicationDateElement = this.getElementByTagName(element, 'pubDate');
+    let publicationDateElement = this.getElementByTagName(element, 'pubDate');
     if (publicationDateElement && publicationDateElement.textContent) {
       return this.parseDate(publicationDateElement.textContent);
     }
@@ -252,8 +253,8 @@ export class FeedService {
     if (!element || !element.children) {
       return null;
     }
-    var iElement: number;
-    for (iElement = 0; iElement < element.children.length; iElement++) {
+
+    for (let iElement = 0; iElement < element.children.length; iElement++) {
       const foundElement = element.children.item(iElement);
       if (foundElement && foundElement.tagName === tagName) {
         return foundElement;
@@ -272,8 +273,8 @@ export class FeedService {
     this.title = this.getElementContentByTagName(xmlDoc, 'title');
     // this.logo = this.getElementContentByTagName(xmlDoc, 'icon');
     const linksWebSite = xmlDoc.getElementsByTagName('link');
-    for (var iLinks = 0; iLinks < linksWebSite.length; iLinks++) {
-      var tag = linksWebSite.item(iLinks);
+    for (let iLinks = 0; iLinks < linksWebSite.length; iLinks++) {
+      const tag = linksWebSite.item(iLinks);
       if (tag && tag.getAttribute('rel') === 'alternate') {
         this.webSiteUrl = tag.getAttribute('href');
         break;
@@ -283,7 +284,7 @@ export class FeedService {
     //   this.logo = this.formatWebsiteUrl(this.webSiteUrl) + '/favicon.ico';
     // }
     const items = xmlDoc.getElementsByTagName('entry');
-    for (var iEntries = 0; iEntries < items.length; iEntries++) {
+    for (let iEntries = 0; iEntries < items.length; iEntries++) {
       const item = items.item(iEntries);
       if (!item) {
         continue;
@@ -293,7 +294,7 @@ export class FeedService {
       if (!linkFound) {
         continue;
       }
-      var link = {
+      const link = {
         url: linkFound.getAttribute('href') as string,
         title: this.getElementContentByTagName(item, 'title'),
         publicationDate: this.getLinkAtomDate(item),
@@ -319,7 +320,7 @@ export class FeedService {
   }
 
   private getLinkAtomDate(element: Element): Date {
-    var publicationDateElement = this.getElementByTagName(element, 'published');
+    let publicationDateElement = this.getElementByTagName(element, 'published');
     if (publicationDateElement && publicationDateElement.textContent) {
       return this.parseDate(publicationDateElement.textContent);
     }

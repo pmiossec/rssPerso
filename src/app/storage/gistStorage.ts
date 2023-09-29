@@ -212,7 +212,8 @@ export class GistStorage {
         if (newRevisionCount > this.data.revisionCount + 1) {
           toast.warning('Probable data loss. Please refresh!!');
         }
-        var updateGist = new Date(response.data.updated_at);
+
+        const updateGist = new Date(response.data.updated_at);
         // strange value where github set in the gist not the same time than in the save response (with 1s more :()
         updateGist.setSeconds(updateGist.getSeconds() + 10);
         this.lastUpdate = updateGist;
@@ -288,7 +289,7 @@ export class GistStorage {
   public removeItemFromReadingList = (item: ReadListItem): void => {
     const msg = `Removing '${item.title}' from reading list`;
     toast.warning(`📃 ${msg}`, { autoClose: 1000 });
-    var indexFound = this.data.readList.findIndex(i => {
+    const indexFound = this.data.readList.findIndex(i => {
       return i.url === item.url;
     });
     if (indexFound !== -1) {
