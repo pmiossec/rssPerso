@@ -153,11 +153,9 @@ export class FeedService {
 
   public loadFeedContent(): Promise<void> {
     this.error = null;
-    const url = this.feedData.noCorsProxy
-      ? this.feedData.url
-      : ((proxyHandler.url.indexOf('://') != -1) ? proxyHandler.url : `${this.httpProtocol}//${proxyHandler.url}`) + this.feedData.url;
+    const url = ((proxyHandler.url.indexOf('://') != -1) ? proxyHandler.url : `${this.httpProtocol}//${proxyHandler.url}`) + this.feedData.url;
     return axios.default
-      .get(url, this.feedData.noCorsProxy ? undefined : proxyHandler.headers)
+      .get(url, proxyHandler.headers)
       .then(this.processFeedXml)
       .catch(err => {
         this.error = "" + err;

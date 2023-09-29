@@ -13,7 +13,6 @@ export interface FeedData {
   name: string;
   url: string;
   icon: string;
-  noCorsProxy?: boolean;
   enhance?: boolean;
   filter?: string;
 }
