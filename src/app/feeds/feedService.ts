@@ -213,7 +213,7 @@ export class FeedService {
 
   private parseDate(date: string): Date {
     return new Date(
-      date.endsWith('Z') ? date.substr(0, date.length - 1) : date
+      date.endsWith('Z') ? date.substring(0, date.length - 1) : date
     );
   }
 

@@ -7,17 +7,13 @@ import { ToastContainer, toast, Zoom } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import useLocalStorage from 'use-local-storage';
 
-interface IMainProps { }
 interface IMainState {
   data: Gist;
   store: GistStorage | undefined;
   feedServices: FeedService[];
 }
 
-function Main(props :IMainProps) {
-  console.log("Loading component...");
-
-  let refreshTimer: number = -1;
+function Main() {
   const [state, setState] = useState<IMainState|null>(null);
   const [debug, setDebug] = useState<boolean>(false);
   const [feedsDisplayed, setFeedsDisplayed] = useState<boolean>(false);
@@ -65,7 +61,6 @@ function Main(props :IMainProps) {
       return;
     }
 
-    // document.addEventListener('visibilitychange', this.handleVisibilityChange, false);
     console.log("Loading gist...");
     const store = new GistStorage(GetFeed(), bearerToken);
     loadGist(store);
@@ -177,7 +172,7 @@ function Main(props :IMainProps) {
           {state.feedServices.map((feedService: FeedService, i: number) =>
             <Feed
               key={feedService.feedData.id}
-              id={i} // to be able to know the une just after (to put it in top of screen when clearing feed)
+              id={i} // to be able to know the one just after (to put it in top of screen when clearing feed)
               feed={feedService}
               debug={debug}
             />
