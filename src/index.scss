@@ -27,30 +27,30 @@ html, body, #root {
   }
 }
 
-main {
-  display: flex;
-}
-
-.left {
-  flex-shrink: 0;
-}
-
 .right {
-  flex-grow: 1;
-  position: sticky;
-  top: 0px;
-  height: 90%;
-
-  h1:first-of-type {
-    font-size: 15px;
-    color: #5aadbb;
-  }
+    display: none;
 }
 
+@media (min-width: 1250px) {
+  main {
+    display: flex;
+  }
 
-@media (max-width: 1250px) {
+  .left {
+    flex-shrink: 0;
+  }
+
   .right {
-    display: none;
+    display: block;
+    flex-grow: 1;
+    position: sticky;
+    top: 0px;
+    height: 90%;
+
+    h1:first-of-type {
+      font-size: 15px;
+      color: #5aadbb;
+    }
   }
 }
 
