@@ -170,25 +170,10 @@ export class Feed extends React.Component<IFeedProps, IFeedState> {
   }
 
   render() {
-    let options = null;
     const linksToDisplay = this.props.feed.getLinksToDisplay()
       .filter(l => this.props.feed.feedData.filter === undefined
       || l.title.indexOf(this.props.feed.feedData.filter) === -1);
-    if (linksToDisplay.length !== 0) {
-      options = (
-        <span>
-          <div className="text-badge close" onClick={this.clearAllFeed}>
-            <a>
-              {linksToDisplay.length}
-            </a>
-          </div>
-          {!this.props.feed.isDisplayingAllLinks() &&
-            <div className="text-badge" onClick={this.displayAll}>
-              <a>All</a>
-            </div>}
-        </span>
-      );
-    } else {
+    if (linksToDisplay.length === 0) {
       if (this.props.feed.error !== null)
       {
         return (
@@ -208,7 +193,20 @@ export class Feed extends React.Component<IFeedProps, IFeedState> {
       else {
         return <div id={this.props.id.toString()} />;
       }
-    }
+    } 
+    const options = (
+      <span>
+        <div className="text-badge close" onClick={this.clearAllFeed}>
+          <a>
+            {linksToDisplay.length}
+          </a>
+        </div>
+        {!this.props.feed.isDisplayingAllLinks() &&
+          <div className="text-badge" onClick={this.displayAll}>
+            <a>All</a>
+          </div>}
+      </span>
+    );
 
     const now = new Date();
     let links = (
