@@ -159,7 +159,12 @@ export class FeedService {
     }
     this.calculateRefreshInterval();
     // tslint:disable-next-line:no-console
-    console.info(`Refresh ${this.title}`, this.refreshInterval / 1000);
+    if (this.refreshInterval === noRefresh) {
+      console.info(`Refresh ${this.title}: none`); 
+    }
+    else {
+      console.info(`Refresh ${this.title}:`, `${Math.floor(this.refreshInterval / 1000)}s / ${Math.floor(this.refreshInterval / 60_000)}m ${Math.floor(this.refreshInterval % 60_000 / 1000)}s`);
+    }
   }
 
   public loadFeedContent(): Promise<void> {
