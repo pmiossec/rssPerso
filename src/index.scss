@@ -27,6 +27,33 @@ html, body, #root {
   }
 }
 
+main {
+  display: flex;
+}
+
+.left {
+  flex-shrink: 0;
+}
+
+.right {
+  flex-grow: 1;
+  position: sticky;
+  top: 0px;
+  height: 90%;
+
+  h1:first-of-type {
+    font-size: 15px;
+    color: #5aadbb;
+  }
+}
+
+
+@media (max-width: 1250px) {
+  .right {
+    display: none;
+  }
+}
+
 @keyframes spin {
   from {
       transform:rotate(0deg);

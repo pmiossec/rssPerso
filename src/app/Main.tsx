@@ -23,6 +23,7 @@ function Main() {
   const [bearerTokenTemp, setBearerTokenTemp] = useState<string|undefined>(undefined);
   const [newFeedUrl, setNewFeedUrl] = useState<string>('');
   const [addFeed, setAddFeed] = useState<boolean>(false);
+  const [content, setContent] = useState<string>("");
 
   function GetFeed(): string {
     const feeds: string[] = [
@@ -166,64 +167,71 @@ function Main() {
 
   return (
     <main className={darkModeEnabled ? 'dark' : 'light'}>
-      <div className="feeds">
-        <ToastContainer 
-          position="bottom-left"
-          autoClose={1000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme={darkModeEnabled ? 'dark' : 'light'}
-          transition={Zoom} />
-        {/* <NotificationContainer /> */}
-        {/* <div className="displayModes">
-        <a onClick={this.clearAll}>Clear All</a> / <a onClick={this.displayAll}>Show All</a>
-      </div> */}
-        {/* <div>
-      {this.state.data.feeds.map((feed: FeedData, i: number) =>
-            <img key={i} src={feed.icon} height="16px" alt={feed.name} />
-        )}
-      </div> */}
-        <div className="feeds">
-          {state.feedServices.map((feedService: FeedService, i: number) =>
-            <Feed
-              key={feedService.feedData.id}
-              id={i} // to be able to know the one just after (to put it in top of screen when clearing feed)
-              feed={feedService}
-              debug={debug}
-            />
+      <section className='left'>
+        <section className="feeds">
+          <ToastContainer 
+            position="bottom-left"
+            autoClose={1000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme={darkModeEnabled ? 'dark' : 'light'}
+            transition={Zoom} />
+          {/* <NotificationContainer /> */}
+          {/* <div className="displayModes">
+          <a onClick={this.clearAll}>Clear All</a> / <a onClick={this.displayAll}>Show All</a>
+        </div> */}
+          {/* <div>
+        {this.state.data.feeds.map((feed: FeedData, i: number) =>
+              <img key={i} src={feed.icon} height="16px" alt={feed.name} />
           )}
-        </div>
-        <ReadingList data={state.data} store={state.store} />
-      </div>
-      <div className='settings'>
-        <a onClick={() => setFeedsDisplayed(!feedsDisplayed)}>{feedsDisplayed ? "Hide feeds" : "Show feeds"}</a> &nbsp;
-        <a onClick={() => setDarkModeEnabled(!darkModeEnabled)}>Toggle theme</a> &nbsp;
-        <a onClick={() => setDebug(!debug)}>Debug</a>
-        <a onClick={() => setAddFeed(!addFeed)}>New feed</a>
-        {addFeed && <section>
-          <label htmlFor="newFeedUrl">Feed Url</label>
-          <input type="text" id="newFeedUrl" onChange={e => setNewFeedUrl(e.target.value)} />
-          <button onClick={() => addNewFeed()}>Add</button></section>
-        }
-      </div>
-      <div className='settings'>
-        {feedsDisplayed && state.feedServices.map((feedService: FeedService, i: number) =>
-              <img
+        </div> */}
+          <article className="feeds">
+            {state.feedServices.map((feedService: FeedService, i: number) =>
+              <Feed
                 key={feedService.feedData.id}
-                src={feedService.logo}
-                height="48"
-                width="48"
-                onClick={() => displayAllLinks(feedService, i)}
-                title={feedService.title}
-                className="feed-icon"
+                id={i} // to be able to know the one just after (to put it in top of screen when clearing feed)
+                feed={feedService}
+                debug={debug}
+                displayContent={c => {
+                  console.log("display content");
+                  setContent(c);
+                }}
               />
             )}
-      </div>
+          </article>
+          <ReadingList data={state.data} store={state.store} />
+        </section>
+        <div className='settings'>
+          <a onClick={() => setFeedsDisplayed(!feedsDisplayed)}>{feedsDisplayed ? "Hide feeds" : "Show feeds"}</a> &nbsp;
+          <a onClick={() => setDarkModeEnabled(!darkModeEnabled)}>Toggle theme</a> &nbsp;
+          <a onClick={() => setDebug(!debug)}>Debug</a>
+          <a onClick={() => setAddFeed(!addFeed)}>New feed</a>
+          {addFeed && <section>
+            <label htmlFor="newFeedUrl">Feed Url</label>
+            <input type="text" id="newFeedUrl" onChange={e => setNewFeedUrl(e.target.value)} />
+            <button onClick={() => addNewFeed()}>Add</button></section>
+          }
+        </div>
+        <div className='settings'>
+          {feedsDisplayed && state.feedServices.map((feedService: FeedService, i: number) =>
+                <img
+                  key={feedService.feedData.id}
+                  src={feedService.logo}
+                  height="48"
+                  width="48"
+                  onClick={() => displayAllLinks(feedService, i)}
+                  title={feedService.title}
+                  className="feed-icon"
+                />
+              )}
+        </div>
+      </section>
+      <div dangerouslySetInnerHTML={{__html: content}} className='right' />
     </main>
   );
 }

@@ -6,6 +6,7 @@ export interface Link extends ReadListItem {
   read: boolean;
   iconUrl: string;
   feedName: string;
+  content: string;
 }
 
 interface CorsProxyHandler {
@@ -218,6 +219,7 @@ export class FeedService {
           : 'No tile found :(',
         publicationDate: this.getLinkRssDate(item),
         description: this.stripHtml(this.getElementContentByTagName(item, 'description')),
+        content: this.getElementContentByTagName(item, 'description'),
         read: false,
         iconUrl: this.feedData.icon,
         feedName: this.feedData.name,
@@ -325,6 +327,7 @@ export class FeedService {
         title: this.getElementContentByTagName(item, 'title'),
         publicationDate: this.getLinkAtomDate(item),
         description: this.stripHtml(this.getElementContentByTagName(item, 'description')),
+        content: this.getElementContentByTagName(item, 'description'),
         other:this.getElementContentByTagName(item, 'category'),
         read: false,
         iconUrl: this.feedData.icon,
