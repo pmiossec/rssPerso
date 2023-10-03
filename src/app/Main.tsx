@@ -6,6 +6,7 @@ import { ReadingList } from './readingList/readingList';
 import { ToastContainer, toast, Zoom } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import useLocalStorage from 'use-local-storage';
+import React from 'react';
 
 interface IMainState {
   data: Gist;
@@ -21,6 +22,7 @@ function Main() {
   const [bearerToken, setBearerToken] = useLocalStorage<string|undefined>("bearerToken", undefined);
   const [bearerTokenTemp, setBearerTokenTemp] = useState<string|undefined>(undefined);
   const [newFeedUrl, setNewFeedUrl] = useState<string>('');
+  const [addFeed, setAddFeed] = useState<boolean>(false);
 
   function GetFeed(): string {
     const feeds: string[] = [
@@ -199,25 +201,29 @@ function Main() {
         <ReadingList data={state.data} store={state.store} />
       </div>
       <div className='settings'>
-      {feedsDisplayed && state.feedServices.map((feedService: FeedService, i: number) =>
-            <img
-              key={feedService.feedData.id}
-              src={feedService.logo}
-              height="48"
-              width="48"
-              onClick={() => displayAllLinks(feedService, i)}
-              title={feedService.title}
-              className="feed-icon"
-            />
-          )}
-      <a onClick={() => setFeedsDisplayed(!feedsDisplayed)}>{feedsDisplayed ? "Hide feeds" : "Show feeds"}</a> &nbsp;
-      <a onClick={() => setDarkModeEnabled(!darkModeEnabled)}>Toggle theme</a> &nbsp;
-      <a onClick={() => setDebug(!debug)}>Enable debug</a>
+        <a onClick={() => setFeedsDisplayed(!feedsDisplayed)}>{feedsDisplayed ? "Hide feeds" : "Show feeds"}</a> &nbsp;
+        <a onClick={() => setDarkModeEnabled(!darkModeEnabled)}>Toggle theme</a> &nbsp;
+        <a onClick={() => setDebug(!debug)}>Debug</a>
+        <a onClick={() => setAddFeed(!addFeed)}>New feed</a>
+        {addFeed && <section>
+          <label htmlFor="newFeedUrl">Feed Url</label>
+          <input type="text" id="newFeedUrl" onChange={e => setNewFeedUrl(e.target.value)} />
+          <button onClick={() => addNewFeed()}>Add</button></section>
+        }
       </div>
-      <section>
-        <label htmlFor="newFeedUrl">Feed Url</label>
-        <input type="text" id="newFeedUrl" onChange={e => setNewFeedUrl(e.target.value)} />
-        <button onClick={() => addNewFeed()}>Add</button></section>
+      <div className='settings'>
+        {feedsDisplayed && state.feedServices.map((feedService: FeedService, i: number) =>
+              <img
+                key={feedService.feedData.id}
+                src={feedService.logo}
+                height="48"
+                width="48"
+                onClick={() => displayAllLinks(feedService, i)}
+                title={feedService.title}
+                className="feed-icon"
+              />
+            )}
+      </div>
     </main>
   );
 }

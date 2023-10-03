@@ -12,7 +12,7 @@
 
 ## Roadmap
 
-* Better display and managment of link added (early notif and disapear and readd if saving failed)
+* Better display and management of link added (early notification and disapear and read if saving failed)
 * Reading list:
     - remove item only when save succeed
 <!-- * Refactoring:
