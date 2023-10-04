@@ -9,6 +9,7 @@ interface IFeedProps {
   id: number;
   debug: boolean;
   displayContent(content: string) : void; 
+  selectNextFeed(currentFeedId: number) : void;
 }
 
 interface IFeedState { }
@@ -50,7 +51,7 @@ export class Feed extends React.Component<IFeedProps, IFeedState> {
   clearAllFeed = (): void => {
     this.props.feed.clearAllFeed();
     this.forceUpdate(() => {
-      this.displayFeedOnTopOfTheScreen((this.props.id + 1).toString());
+      this.props.selectNextFeed(this.props.id);
     });
   }
 

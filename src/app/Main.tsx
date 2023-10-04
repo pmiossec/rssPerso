@@ -6,7 +6,6 @@ import { ReadingList } from './readingList/readingList';
 import { ToastContainer, toast, Zoom } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import useLocalStorage from 'use-local-storage';
-import React from 'react';
 
 interface IMainState {
   data: Gist;
@@ -23,7 +22,7 @@ function Main() {
   const [bearerTokenTemp, setBearerTokenTemp] = useState<string|undefined>(undefined);
   const [newFeedUrl, setNewFeedUrl] = useState<string>('');
   const [addFeed, setAddFeed] = useState<boolean>(false);
-  const [content, setContent] = useState<string>("");
+  const [currentArticleDescription, setCurrentArticleDescription] = useState<string>("");
 
   function GetFeed(): string {
     const feeds: string[] = [
@@ -113,6 +112,29 @@ function Main() {
     const feed = document.getElementById(feedId.toString());
     if (feed != null) {
       feed.scrollIntoView(true);
+      // feed.scrollIntoView({
+      //   block: 'nearest',
+      //   inline: 'nearest',
+      //   behavior: 'smooth'
+      // });
+    }
+  }
+
+  function selectNextFeed(currentFeedId: number) {
+    if (!state) {
+      return;
+    }
+
+    let id = currentFeedId + 1; 
+    while(id < state.feedServices.length) {
+      const nextFeed = state.feedServices[id];
+      if (nextFeed.links.length) {
+        console.log("Will Bring to view", nextFeed.feedData, id);
+        displayFeedOnTopOfTheScreen(id);
+        return;
+      }
+      
+      id++;
     }
   }
 
@@ -197,10 +219,8 @@ function Main() {
                 id={i} // to be able to know the one just after (to put it in top of screen when clearing feed)
                 feed={feedService}
                 debug={debug}
-                displayContent={c => {
-                  console.log("display content");
-                  setContent(c);
-                }}
+                displayContent={setCurrentArticleDescription}
+                selectNextFeed={selectNextFeed}
               />
             )}
           </article>
@@ -231,7 +251,7 @@ function Main() {
               )}
         </div>
       </section>
-      <div dangerouslySetInnerHTML={{__html: content}} className='right' />
+      <div dangerouslySetInnerHTML={{__html: currentArticleDescription}} className='right' />
     </main>
   );
 }
