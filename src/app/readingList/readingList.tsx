@@ -1,6 +1,6 @@
 import * as React from 'react';
-import * as Helper from '../helper';
 import { GistStorage, ReadListItem, Gist } from '../storage/gistStorage';
+import { formatDate } from '../helper';
 
 interface IReadingListProps {
   data: Gist;
@@ -62,7 +62,7 @@ export class ReadingList extends React.Component<
         return (
           <div key={i}>
             [<span className="date">
-              {Helper.DateFormatter.formatDate(l.publicationDate, now)}
+              {formatDate(l.publicationDate, now)}
             </span>
             |<a href={l.url} target="_blank" rel="noreferrer">
               📄

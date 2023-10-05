@@ -1,8 +1,8 @@
 import * as React from 'react';
-import * as Helper from '../helper';
 import { FeedService, Link, noRefresh } from './feedService';
 import { ReadListItem } from '../storage/gistStorage';
 import YoutubeControls from './YoutubeControls';
+import { formatDate } from '../helper';
 
 interface IFeedProps {
   feed: FeedService;
@@ -216,7 +216,7 @@ export class Feed extends React.Component<IFeedProps, IFeedState> {
         {linksToDisplay.map((l: Link, i: number) =>
           <div key={l.url} className='link'>
             [<a onClick={this.clearFeed.bind(null, l.publicationDate)}>
-              {Helper.DateFormatter.formatDate(l.publicationDate, now)}
+              {formatDate(l.publicationDate, now)}
             </a>|
             <a onClick={this.addToReadList(l, i)}>📑</a>]
             {!this.props.feed.isYoutube && <a
