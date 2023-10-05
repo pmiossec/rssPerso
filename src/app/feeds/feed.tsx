@@ -224,7 +224,7 @@ export class Feed extends React.Component<IFeedProps, IFeedState> {
               target="_blank"
               rel="noreferrer"
               onClick={this.removeIfFirstOnClick(l, i)}
-              title={l.description}
+              // title={l.description}
               onMouseOver={() => this.props.displayContent(l.content ? `<h1>${l.title}</h1>\n${l.content}` : '')}
             >
               {this.props.feed.feedData.enhance === true ? this.enhanceWithCategory(l.title, l.other) : l.title}
