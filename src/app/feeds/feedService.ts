@@ -217,14 +217,20 @@ export class FeedService {
         continue;
       }
 
+      
+      let content = this.getElementContentByTagName(item, 'description')
+      if(!content || content.length === 0) {
+        content = this.getElementContentByTagName(item, 'content:encoded')
+      }
+
       const link = {
         url: this.getElementContentByTagName(item, 'link'),
         title: item
           ? this.getElementContentByTagName(item, 'title')
           : 'No tile found :(',
         publicationDate: this.getLinkRssDate(item),
-        description: this.stripHtml(this.getElementContentByTagName(item, 'description')),
-        content: this.getElementContentByTagName(item, 'description'),
+        description: this.stripHtml(content),
+        content: content,
         read: false,
         iconUrl: this.feedData.icon,
         feedName: this.feedData.name,
@@ -306,7 +312,6 @@ export class FeedService {
       }
     }
 
-
     const linksWebSite = xmlDoc.getElementsByTagName('link');
     for (let iLinks = 0; iLinks < linksWebSite.length; iLinks++) {
       const tag = linksWebSite.item(iLinks);
@@ -327,18 +332,31 @@ export class FeedService {
       if (!linkFound) {
         continue;
       }
+      
+      let content = this.getElementContentByTagName(item, 'description')
+      if(!content || content.length === 0) {
+        content = this.getElementContentByTagName(item, 'content')
+      }
+      if(!content || content.length === 0) {
+        const mediaGroup = item.getElementsByTagName('media:group');
+        if (mediaGroup && mediaGroup.length > 0) {
+          content = this.getElementContentByTagName(mediaGroup[0], 'media:description');
+        }
+      }
+  
       const link = {
         url: linkFound.getAttribute('href') as string,
         title: this.getElementContentByTagName(item, 'title'),
         publicationDate: this.getLinkAtomDate(item),
-        description: this.stripHtml(this.getElementContentByTagName(item, 'description')),
-        content: this.getElementContentByTagName(item, 'description'),
+        description: this.stripHtml(content),
+        content: content,
         other:this.getElementContentByTagName(item, 'category'),
         read: false,
         iconUrl: this.feedData.icon,
         feedName: this.feedData.name,
         idFeed: this.feedData.id
       };
+
       this.allLinks.push(link);
       if (link.publicationDate > this.clearDate) {
         this.links.push(link);

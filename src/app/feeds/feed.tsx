@@ -230,7 +230,7 @@ export class Feed extends React.Component<IFeedProps, IFeedState> {
               {this.props.feed.feedData.enhance === true ? this.enhanceWithCategory(l.title, l.other) : l.title}
             </a>
             }
-            {this.props.feed.isYoutube && <YoutubeControls url={l.url} title={l.title} />}
+            {this.props.feed.isYoutube && <YoutubeControls link={l} displayContent={this.props.displayContent} />}
           </div>
         )}
       </div>
