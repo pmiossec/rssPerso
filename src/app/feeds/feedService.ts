@@ -343,6 +343,9 @@ export class FeedService {
           content = this.getElementContentByTagName(mediaGroup[0], 'media:description');
         }
       }
+      if(!content || content.length === 0) {
+        content = this.getElementContentByTagName(item, 'summary')
+      }
   
       const link = {
         url: linkFound.getAttribute('href') as string,
