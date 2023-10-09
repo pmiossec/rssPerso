@@ -340,7 +340,8 @@ export class FeedService {
       if(!content || content.length === 0) {
         const mediaGroup = item.getElementsByTagName('media:group');
         if (mediaGroup && mediaGroup.length > 0) {
-          content = this.getElementContentByTagName(mediaGroup[0], 'media:description');
+          content = '<img src="' + this.getElementByTagName(mediaGroup[0], 'media:thumbnail')?.getAttribute("url") + '" /><br/>'
+            + this.getElementContentByTagName(mediaGroup[0], 'media:description')?.replaceAll('\n', '<br/>');
         }
       }
       if(!content || content.length === 0) {
