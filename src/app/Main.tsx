@@ -230,6 +230,7 @@ function Main() {
           <a onClick={() => setFeedsDisplayed(!feedsDisplayed)}>{feedsDisplayed ? "Hide feeds" : "Show feeds"}</a> &nbsp;
           <a onClick={() => setDarkModeEnabled(!darkModeEnabled)}>Toggle theme</a> &nbsp;
           <a onClick={() => setDebug(!debug)}>Debug</a>
+          <a href={`https://gist.github.com/pmiossec/${GetFeed()}`} target='_blank'>Gist</a>
           <a onClick={() => setAddFeed(!addFeed)}>New feed</a>
           {addFeed && <section>
             <label htmlFor="newFeedUrl">Feed Url</label>
@@ -242,8 +243,8 @@ function Main() {
                 <img
                   key={feedService.feedData.id}
                   src={feedService.logo}
-                  height="48"
-                  width="48"
+                  height="32"
+                  width="32"
                   onClick={() => displayAllLinks(feedService, i)}
                   title={feedService.title}
                   className="feed-icon"
