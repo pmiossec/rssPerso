@@ -273,6 +273,7 @@ export class FeedService {
   ): string {
     const foundElement = this.getElementByTagName(element, tagName);
     if (foundElement && foundElement.textContent) {
+      console.log("content_element", foundElement);
       return foundElement.textContent;
     }
     return '';
