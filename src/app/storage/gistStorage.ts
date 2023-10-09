@@ -127,6 +127,7 @@ export class GistStorage {
         if (data === null) {
           return {} as Gist;
         }
+
         this.data = {
           feeds: this.getFeedsData(data.files),
           state: this.getFeedStateData(data.files),
@@ -135,8 +136,6 @@ export class GistStorage {
         };
         this.lastUpdate = new Date(data.updated_at);
         this.saveDataInLocalStorage();
-        // tslint:disable-next-line:no-console
-        // console.log('data from gist received:', this.data);
 
         return this.data;
       })

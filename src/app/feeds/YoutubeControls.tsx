@@ -17,7 +17,7 @@ export default ({link, displayContent}: YoutubeContolsProps): JSX.Element => {
         {/* @ts-ignore */}
         {navigator.canShare && <a onClick={shareUrl} className="youtube">{link.title}</a>}
         {!navigator.canShare && <a href={convertToInvidiousUrl(link.url)}
-              onMouseOver={() => displayContent(link.content ? `<h1>${link.title}</h1>\n${link.content.replace('\n', '<br/>')}` : '')} target="_blank" >
+              onMouseOver={() => displayContent(link.content ? `<h1>${link.title}</h1>\n${link.content}` : '')} target="_blank" >
             {link.title}
         </a>
 }
