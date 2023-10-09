@@ -111,12 +111,12 @@ function Main() {
   function displayFeedOnTopOfTheScreen(feedId: number) {
     const feed = document.getElementById(feedId.toString());
     if (feed != null) {
-      feed.scrollIntoView(true);
-      // feed.scrollIntoView({
-      //   block: 'nearest',
-      //   inline: 'nearest',
-      //   behavior: 'smooth'
-      // });
+      // feed.scrollIntoView(true);
+      feed.scrollIntoView({
+        block: 'nearest',
+        inline: 'nearest',
+        behavior: 'smooth'
+      });
     }
   }
 
