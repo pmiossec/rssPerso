@@ -218,7 +218,11 @@ export class Feed extends React.Component<IFeedProps, IFeedState> {
             [<a onClick={this.clearFeed.bind(null, l.publicationDate)}>
               {formatDate(l.publicationDate, now)}
             </a>|
-            <a onClick={this.addToReadList(l, i)}>📑</a>]
+            <a onClick={this.addToReadList(l, i)}>📑</a>
+            {/* @ts-ignore */}
+            {navigator.canShare && '|'}
+            {/* @ts-ignore */}
+            {navigator.canShare && <a onClick={() => navigator.share({url: link.url})} >🔗</a>}]
             {!this.props.feed.isYoutube && <a
               href={l.url}
               target="_blank"
