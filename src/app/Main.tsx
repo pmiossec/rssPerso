@@ -232,6 +232,8 @@ function Main() {
           <a href="https://bnf.idm.oclc.org/login?url=http://www.mediapart.fr/licence" target='_blank'>Mediapart</a>
           <a href="https://easybnf.fr/nyt" target='_blank'>NYT</a>
           <a href="https://bnf.idm.oclc.org/login?url=https://www.pressreader.com/" target='_blank'>PressReader</a>
+          <a href="https://bnf.idm.oclc.org/login?url=https://bnf.mt.musicme.com" target='_blank'>🎶</a>
+          <a href="/spotify-perso/" target='_blank'>🎧</a>
           <a href="https://easybnf.fr/" target='_blank'>EasyBNF</a>
           | &nbsp;
           <a onClick={() => setFeedsDisplayed(!feedsDisplayed)}>{feedsDisplayed ? "Hide feeds" : "Feeds"}</a>
