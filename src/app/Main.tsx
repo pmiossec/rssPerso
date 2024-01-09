@@ -236,11 +236,11 @@ function Main() {
           <a href="/spotify-perso/" target='_blank'>🎧</a>
           <a href="https://easybnf.fr/" target='_blank'>EasyBNF</a>
           | &nbsp;
-          <a onClick={() => setFeedsDisplayed(!feedsDisplayed)}>{feedsDisplayed ? "Hide feeds" : "Feeds"}</a>
-          <a onClick={() => setDarkModeEnabled(!darkModeEnabled)}>{darkModeEnabled ? "Light" : "Dark"}</a>
-          <a onClick={() => setDebug(!debug)}>Debug</a>
-          <a href={`https://gist.github.com/pmiossec/${GetFeed()}`} target='_blank'>Gist</a>
-          <a onClick={() => setAddFeed(!addFeed)}>Add feed</a>
+          <a onClick={() => setFeedsDisplayed(!feedsDisplayed)} title="Show all feeds">{feedsDisplayed ? "Hide feeds" : "📰"}</a>
+          <a onClick={() => setDarkModeEnabled(!darkModeEnabled)} title={darkModeEnabled ? "Switch to light theme" : "Switch to dark theme"}>{darkModeEnabled ? "🌞" : "🌚"}</a>
+          <a onClick={() => setDebug(!debug)} title="Debug">🐞</a>
+          <a href={`https://gist.github.com/pmiossec/${GetFeed()}`} title="Open Gist" target='_blank'><label className="github">&nbsp;&nbsp;</label></a>
+          <a onClick={() => setAddFeed(!addFeed)} title="Add new feed"><label className="rss">&nbsp;&nbsp;</label></a>
           {addFeed && <section>
             <label htmlFor="newFeedUrl">Feed Url</label>
             <input type="text" id="newFeedUrl" onChange={e => setNewFeedUrl(e.target.value)} />
