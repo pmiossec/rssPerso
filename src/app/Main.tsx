@@ -237,7 +237,15 @@ function Main() {
             <input type="text" id="newFeedUrl" onChange={e => setNewFeedUrl(e.target.value)} />
             <button onClick={() => addNewFeed()}>Add</button></section>
           }
+          <a href="https://bnf.idm.oclc.org/login?url=https://nouveau-europresse-com.bnf.idm.oclc.org/Search/Reading" target='_blank'>Europresse</a>
+          <a href="https://www.lemonde.fr/autologin" target='_blank'>Le Monde</a>
+          <a href="https://bnf.idm.oclc.org/login?url=http://www.arretsurimages.net/autologin.php" target='_blank'>Arrêt sur Image</a>
+          <a href="https://bnf.idm.oclc.org/login?url=http://www.mediapart.fr/licence" target='_blank'>Mediapart</a>
+          <a href="https://easybnf.fr/nyt" target='_blank'>NewYork Times</a>
+          <a href="https://bnf.idm.oclc.org/login?url=https://www.pressreader.com/" target='_blank'>PressReader</a>
+          <a href="https://easybnf.fr/" target='_blank'>EasyBNF</a>
         </div>
+
         <div className='settings'>
           {feedsDisplayed && state.feedServices.map((feedService: FeedService, i: number) =>
                 <img

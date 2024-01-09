@@ -193,10 +193,30 @@ export class FeedService {
     }
   }
 
+  private transformWebSiteUrl(url: string | null): string {
+    const mappings = [
+      ["zdnet.fr", "https://www.zdnet.fr"],
+      ["lemonde.fr", "https://www.lemonde.fr/autologin"],
+    ]
+
+    if (!url) {
+      return "#";
+    }
+
+    for (let i = 0; i < mappings.length; i++) {
+      const mapping = mappings[i];
+      if(url.indexOf(mapping[0]) != -1) {
+        return mapping[1];
+      }
+    }
+
+    return url;
+  }
+
   private manageRssFeed(xmlDoc: HTMLElement): void {
     const channel = this.getElementByTagName(xmlDoc, 'channel');
     if (channel) {
-      this.webSiteUrl = this.getElementContentByTagName(channel, 'link');
+      this.webSiteUrl = this.transformWebSiteUrl(this.getElementContentByTagName(channel, 'link'));
       if (!this.title) {
         this.title = this.getElementContentByTagName(channel, 'title');
       }
@@ -317,7 +337,7 @@ export class FeedService {
     for (let iLinks = 0; iLinks < linksWebSite.length; iLinks++) {
       const tag = linksWebSite.item(iLinks);
       if (tag && tag.getAttribute('rel') === 'alternate') {
-        this.webSiteUrl = tag.getAttribute('href');
+        this.webSiteUrl = this.transformWebSiteUrl(tag.getAttribute('href'));
         break;
       }
     }
