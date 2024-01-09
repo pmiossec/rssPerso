@@ -227,23 +227,23 @@ function Main() {
           <ReadingList data={state.data} store={state.store} />
         </section>
         <div className='settings'>
-          <a onClick={() => setFeedsDisplayed(!feedsDisplayed)}>{feedsDisplayed ? "Hide feeds" : "Show feeds"}</a> &nbsp;
-          <a onClick={() => setDarkModeEnabled(!darkModeEnabled)}>Toggle theme</a> &nbsp;
+          <a href="https://bnf.idm.oclc.org/login?url=https://nouveau.europresse.com/access/ip/default.aspx?un=D000067U_1" target='_blank'>€Press</a>
+          <a href="https://bnf.idm.oclc.org/login?url=http://www.arretsurimages.net/autologin.php" target='_blank'>Arrêt/Image</a>
+          <a href="https://bnf.idm.oclc.org/login?url=http://www.mediapart.fr/licence" target='_blank'>Mediapart</a>
+          <a href="https://easybnf.fr/nyt" target='_blank'>NYT</a>
+          <a href="https://bnf.idm.oclc.org/login?url=https://www.pressreader.com/" target='_blank'>PressReader</a>
+          <a href="https://easybnf.fr/" target='_blank'>EasyBNF</a>
+          | &nbsp;
+          <a onClick={() => setFeedsDisplayed(!feedsDisplayed)}>{feedsDisplayed ? "Hide feeds" : "Feeds"}</a>
+          <a onClick={() => setDarkModeEnabled(!darkModeEnabled)}>{darkModeEnabled ? "Light" : "Dark"}</a>
           <a onClick={() => setDebug(!debug)}>Debug</a>
           <a href={`https://gist.github.com/pmiossec/${GetFeed()}`} target='_blank'>Gist</a>
-          <a onClick={() => setAddFeed(!addFeed)}>New feed</a>
+          <a onClick={() => setAddFeed(!addFeed)}>Add feed</a>
           {addFeed && <section>
             <label htmlFor="newFeedUrl">Feed Url</label>
             <input type="text" id="newFeedUrl" onChange={e => setNewFeedUrl(e.target.value)} />
             <button onClick={() => addNewFeed()}>Add</button></section>
           }
-          <a href="https://bnf.idm.oclc.org/login?url=https://nouveau-europresse-com.bnf.idm.oclc.org/Search/Reading" target='_blank'>Europresse</a>
-          <a href="https://www.lemonde.fr/autologin" target='_blank'>Le Monde</a>
-          <a href="https://bnf.idm.oclc.org/login?url=http://www.arretsurimages.net/autologin.php" target='_blank'>Arrêt sur Image</a>
-          <a href="https://bnf.idm.oclc.org/login?url=http://www.mediapart.fr/licence" target='_blank'>Mediapart</a>
-          <a href="https://easybnf.fr/nyt" target='_blank'>NewYork Times</a>
-          <a href="https://bnf.idm.oclc.org/login?url=https://www.pressreader.com/" target='_blank'>PressReader</a>
-          <a href="https://easybnf.fr/" target='_blank'>EasyBNF</a>
         </div>
 
         <div className='settings'>
