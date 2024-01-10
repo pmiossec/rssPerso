@@ -167,16 +167,21 @@ export class FeedService {
     }
   }
 
-  public loadFeedContent(): Promise<void> {
+  public async loadFeedContent(): Promise<void> {
     this.error = null;
     const url = ((proxyHandler.url.indexOf('://') != -1) ? proxyHandler.url : `${this.httpProtocol}//${proxyHandler.url}`) + this.feedData.url;
-    return axios.default
-      .get(url, proxyHandler.headers)
-      .then(this.processFeedXml)
-      .catch(err => {
-        this.error = "" + err;
-        console.error(`Error feed: ${this.title} / ${this.error}`);
-      });
+    try {
+      const response = await axios.default.get(url, proxyHandler.headers)
+      this.processFeedXml(response);
+    } catch (error) {
+      if (error instanceof axios.AxiosError) {
+        this.error = `${error} - Code: ${error.response?.status} - Text: ${error.response?.statusText} `;
+        console.error(`Error feed: ${this.title} / ${this.error}`, error);
+        return;
+      }
+      this.error = `${error}`;
+      console.error(`Error feed: ${this.title} / ${this.error}`, error);
+    }
   }
 
   private storeClearDate(clearDate: Date): void {
@@ -314,7 +319,7 @@ export class FeedService {
   ): string {
     const foundElement = this.getElementByTagName(element, tagName);
     if (foundElement && foundElement.textContent) {
-      console.log("content_element", foundElement);
+      //console.log("content_element", foundElement);
       return foundElement.textContent;
     }
     return '';

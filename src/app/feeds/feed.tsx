@@ -188,7 +188,7 @@ export class Feed extends React.Component<IFeedProps, IFeedState> {
               </a>
             </div>
           </div>
-          <div>{this.props.feed.error}<a href={this.props.feed.feedData.url} target="_blank" rel="noreferrer" >⚙️</a></div>
+          <div>{this.props.feed.error} &nbsp; <a href={this.props.feed.feedData.url} target="_blank" rel="noreferrer" ><label className="rss"></label></a></div>
         </div>
         );
       }
