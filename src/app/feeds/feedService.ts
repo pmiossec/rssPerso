@@ -197,6 +197,8 @@ export class FeedService {
     const mappings = [
       ["zdnet.fr", "https://www.zdnet.fr"],
       ["lemonde.fr", "https://www.lemonde.fr/autologin"],
+      ["mediapart.fr", "https://bnf.idm.oclc.org/login?url=http://www.mediapart.fr/licence"],
+      ["arretsurimages.net", "https://bnf.idm.oclc.org/login?url=http://www.arretsurimages.net/autologin.php"],
     ]
 
     if (!url) {
@@ -213,6 +215,25 @@ export class FeedService {
     return url;
   }
 
+  private transformLinks(url: string | null): string {
+    const mappings = [
+      ["www.mediapart.fr", "www-mediapart-fr.bnf.idm.oclc.org"],
+      ["www.arretsurimages.net", "www-arretsurimages-net.bnf.idm.oclc.org"],
+    ]
+
+    if (!url) {
+      return "#";
+    }
+
+    for (let i = 0; i < mappings.length; i++) {
+      const mapping = mappings[i];
+      if(url.indexOf(mapping[0]) != -1) {
+        return url.replace(mapping[0], mapping[1]);
+      }
+    }
+
+    return url;
+  }
   private manageRssFeed(xmlDoc: HTMLElement): void {
     const channel = this.getElementByTagName(xmlDoc, 'channel');
     if (channel) {
@@ -244,7 +265,7 @@ export class FeedService {
       }
 
       const link = {
-        url: this.getElementContentByTagName(item, 'link'),
+        url: this.transformLinks(this.getElementContentByTagName(item, 'link')),
         title: item
           ? this.getElementContentByTagName(item, 'title')
           : 'No tile found :(',

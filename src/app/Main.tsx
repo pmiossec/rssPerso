@@ -228,8 +228,8 @@ function Main() {
         </section>
         <div className='settings'>
           <a href="https://bnf.idm.oclc.org/login?url=https://nouveau.europresse.com/access/ip/default.aspx?un=D000067U_1" target='_blank'>€Press</a>
-          <a href="https://bnf.idm.oclc.org/login?url=http://www.arretsurimages.net/autologin.php" target='_blank'>Arrêt/Image</a>
-          <a href="https://bnf.idm.oclc.org/login?url=http://www.mediapart.fr/licence" target='_blank'>Mediapart</a>
+          {/* <a href="https://bnf.idm.oclc.org/login?url=http://www.arretsurimages.net/autologin.php" target='_blank'>Arrêt/Image</a>
+          <a href="https://bnf.idm.oclc.org/login?url=http://www.mediapart.fr/licence" target='_blank'>Mediapart</a> */}
           <a href="https://easybnf.fr/nyt" target='_blank'>NYT</a>
           <a href="https://bnf.idm.oclc.org/login?url=https://www.pressreader.com/" target='_blank'>PressReader</a>
           <a href="https://bnf.idm.oclc.org/login?url=https://bnf.mt.musicme.com" target='_blank'>🎶</a>
