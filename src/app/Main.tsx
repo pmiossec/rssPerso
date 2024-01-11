@@ -235,6 +235,7 @@ function Main() {
           <a href="https://bnf.idm.oclc.org/login?url=https://bnf.mt.musicme.com" target='_blank'>🎶</a>
           <a href="/spotify-perso/" target='_blank'>🎧</a>
           <a href="https://easybnf.fr/" target='_blank'>EasyBNF</a>
+          <a href="https://omnivore.app/home?q=in%3Ainbox" target='_blank' title="Omnivore">📖</a>
           | &nbsp;
           <a onClick={() => setFeedsDisplayed(!feedsDisplayed)} title="Show all feeds">{feedsDisplayed ? "Hide feeds" : "📰"}</a>
           <a onClick={() => setDarkModeEnabled(!darkModeEnabled)} title={darkModeEnabled ? "Switch to light theme" : "Switch to dark theme"}>{darkModeEnabled ? "🌞" : "🌚"}</a>
