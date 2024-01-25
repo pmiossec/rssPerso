@@ -151,7 +151,8 @@ div.close-bottom-right {
   bottom: 0px;
   right: 0px;
   opacity: 0.5;
-  padding: 5px;
+  padding: 25px 0px 0px 25px;
+  cursor: pointer;
 }
 
 @media (min-width: 1250px) {
@@ -171,10 +172,13 @@ div.close-bottom-right {
     white-space: nowrap;
     overflow: hidden;
     background-color: #7e7070;
+    text-align: center;
+    
     &.open {
       background-color: #518d6a;
     }
     &.refresh {
+      padding: 5px;
       background-color: steelblue;
     }
     &.close {
