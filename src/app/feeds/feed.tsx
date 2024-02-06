@@ -108,6 +108,7 @@ export class Feed extends React.Component<IFeedProps, IFeedState> {
     ['equipe de france', '🇫🇷‍'],
     ['jeux olympiques', '🏅'],
     ['alpinisme', '🧗'],
+    ['badminton', '🏸'],
     ['tennis', '🎾'],
     ['nba', '🏀🇺🇸'],
     ['basket', '🏀'],
