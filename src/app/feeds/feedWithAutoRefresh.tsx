@@ -14,12 +14,19 @@ interface IFeedWithAutoRefreshProps {
 interface IFeedWithAutoRefreshState {
   // timerId: number = -1;
   links: Link[];
+  error: string | null;
+  logoUrl: string;
+  webSiteUrl: string;
+  title: string;
+  feedUrl: string
+  isYoutube: boolean;
+  enhance: boolean;
 }
 
 export class FeedWithAutoRefresh extends React.Component<IFeedWithAutoRefreshProps, IFeedWithAutoRefreshState> {
   timerId: number = -1;
 
-  state = { links: []};
+  state = {error: null, logoUrl: "null", webSiteUrl: "null", title: 'Future title', feedUrl: this.props.feed.feedData.url, isYoutube: this.props.feed.isYoutube, enhance: this.props.feed.feedData.enhance === true ,links: []};
   componentDidMount(): void {
     this.loadFeed().then(() => {
       if (this.props.feed.refreshInterval === noRefresh) {
@@ -40,18 +47,25 @@ export class FeedWithAutoRefresh extends React.Component<IFeedWithAutoRefreshPro
     }
   }
 
-  updateStateLinks(): void {
-    this.setState({ links: this.props.feed.getLinksToDisplay()});
+  updateFeedState(): void {
+    this.setState({
+      ...this.state,
+      links: this.props.feed.getLinksToDisplay(),
+      error: this.props.feed.error,
+      logoUrl: this.props.feed.logo,
+      webSiteUrl: this.props.feed.webSiteUrl as string,
+      title: this.props.feed.title,
+     });
   }
 
   loadFeed(): Promise<void> {
     return this.props.feed.loadFeedContent().then(() => {
-      this.updateStateLinks();
+      this.updateFeedState();
     });
   }
 
   refresh(): void {
-    this.updateStateLinks();
+    this.updateFeedState();
   }
 
   clearAllFeed = (): void => {
@@ -68,7 +82,7 @@ export class FeedWithAutoRefresh extends React.Component<IFeedWithAutoRefreshPro
   clearFeed = (date: Date): void => {
     this.props.feed.clearFeed(date);
     this.displayFeedOnTopOfTheScreen((this.props.id).toString());
-    this.updateStateLinks();
+    this.updateFeedState();
   }
 
   displayFeedOnTopOfTheScreen(feedId: string) {
@@ -84,7 +98,7 @@ export class FeedWithAutoRefresh extends React.Component<IFeedWithAutoRefreshPro
 
   displayAll = (): void => {
     this.props.feed.displayAllLinks();
-    this.updateStateLinks();
+    this.updateFeedState();
   }
 
   addToReadList = (item: ReadListItem, index: number) => {
@@ -92,7 +106,7 @@ export class FeedWithAutoRefresh extends React.Component<IFeedWithAutoRefreshPro
       const removingItem = index === 0;
       this.props.feed.addItemToReadingList(item, removingItem);
       if (removingItem) {
-        this.updateStateLinks();
+        this.updateFeedState();
       }
     };
   }
@@ -103,7 +117,7 @@ export class FeedWithAutoRefresh extends React.Component<IFeedWithAutoRefreshPro
         const shouldRemoveItem = index === 0;
         if (shouldRemoveItem) {
           this.clearFeed(item.publicationDate);
-          this.updateStateLinks();
+          this.updateFeedState();
         }
       }, 200);
   };
@@ -117,10 +131,10 @@ export class FeedWithAutoRefresh extends React.Component<IFeedWithAutoRefreshPro
       id={this.props.id}
       debug={this.props.debug}
       links={this.state.links}
-      error={this.props.feed.error}
-      logoUrl={this.props.feed.logo}
-      webSiteUrl={this.props.feed.webSiteUrl as string}
-      title={this.props.feed.title}
+      error={this.state.error}
+      logoUrl={this.state.logoUrl}
+      webSiteUrl={this.state.webSiteUrl as string}
+      title={this.state.title}
       feedUrl={this.props.feed.feedData.url}
       isYoutube={this.props.feed.isYoutube}
       enhance={this.props.feed.feedData.enhance === true}
