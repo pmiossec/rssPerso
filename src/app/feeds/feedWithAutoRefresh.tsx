@@ -2,6 +2,7 @@ import * as React from 'react';
 import { FeedService, Link, noRefresh } from './feedService';
 import { ReadListItem } from '../storage/gistStorage';
 import { Feed } from './feed';
+import { useEffect, useState } from 'react';
 
 interface IFeedWithAutoRefreshProps {
   feed: FeedService;
@@ -23,69 +24,76 @@ interface IFeedWithAutoRefreshState {
   enhance: boolean;
 }
 
-export class FeedWithAutoRefresh extends React.Component<IFeedWithAutoRefreshProps, IFeedWithAutoRefreshState> {
-  timerId: number = -1;
+export function FeedWithAutoRefresh(props: IFeedWithAutoRefreshProps) {
+  let timerId: number = -1;
 
-  state = {error: null, logoUrl: "null", webSiteUrl: "null", title: 'Future title', feedUrl: this.props.feed.feedData.url, isYoutube: this.props.feed.isYoutube, enhance: this.props.feed.feedData.enhance === true ,links: []};
-  componentDidMount(): void {
-    this.loadFeed().then(() => {
-      if (this.props.feed.refreshInterval === noRefresh) {
-        this.timerId = -1;
+  const [error, setError] = useState<string | null>(null);
+  // state = {error: null
+  const [logoUrl, setlogoUrl] = useState("null");
+  const [webSiteUrl, setwebSiteUrl] = useState("null");
+  const [title, settitle] = useState('Future title');
+  const [feedUrl, setfeedUrl] = useState(props.feed.feedData.url);
+  const [isYoutube, setIsYoutube] = useState(props.feed.isYoutube);
+  const [enhance, setEnhance] = useState(props.feed.feedData.enhance === true);
+  const [links, setLinks] = useState<Link[]>([]);
+
+  useEffect(() => {
+    loadFeed().then(() => {
+      if (props.feed.refreshInterval === noRefresh) {
+        timerId = -1;
         return;
       }
       
-      this.timerId = window.setInterval(
-        () => this.loadFeed(),
-        this.props.feed.refreshInterval
+      timerId = window.setInterval(
+        () => loadFeed(),
+        props.feed.refreshInterval
       );
     });
-  }
-
-  componentWillUnmount(): void {
-    if (this.timerId !== -1) {
-      window.clearInterval(this.timerId);
+    return () => {
+      if (timerId !== -1) {
+        window.clearInterval(timerId);
+      }
     }
+  }, []);
+
+  function updateFeedState(): void {
+    setError(props.feed.error);
+    setLinks(props.feed.getLinksToDisplay());
+    setlogoUrl(props.feed.logo);
+    setwebSiteUrl(props.feed.webSiteUrl as string);
+    settitle(props.feed.title);
   }
 
-  updateFeedState(): void {
-    this.setState({
-      ...this.state,
-      links: this.props.feed.getLinksToDisplay(),
-      error: this.props.feed.error,
-      logoUrl: this.props.feed.logo,
-      webSiteUrl: this.props.feed.webSiteUrl as string,
-      title: this.props.feed.title,
-     });
-  }
-
-  loadFeed(): Promise<void> {
-    return this.props.feed.loadFeedContent().then(() => {
-      this.updateFeedState();
+  function loadFeed(): Promise<void> {
+    return props.feed.loadFeedContent().then(() => {
+      updateFeedState();
     });
   }
 
-  refresh(): void {
-    this.updateFeedState();
+  function refresh(): void {
+    updateFeedState();
   }
 
-  clearAllFeed = (): void => {
-    this.props.feed.clearAllFeed();
-    this.setState({ links: this.props.feed.getLinksToDisplay()}, () => {
-      this.props.selectNextFeed(this.props.id);
-    });
+  function clearAllFeed(): void {
+    props.feed.clearAllFeed();
+    setLinks(props.feed.getLinksToDisplay());
+    // TODO
+    // () => {
+    //   props.selectNextFeed(props.id);
+    // });
   }
 
-  refreshFeed = (): void => {
-    this.loadFeed();
+  function refreshFeed(): void {
+    loadFeed();
   }
 
-  clearFeed = (date: Date): void => {
-    this.props.feed.clearFeed(date);
-    this.displayFeedOnTopOfTheScreen((this.props.id).toString());
-    this.updateFeedState();
+  function clearFeed(date: Date): void {
+    props.feed.clearFeed(date);
+    displayFeedOnTopOfTheScreen((props.id).toString());
+    updateFeedState();
   }
 
-  displayFeedOnTopOfTheScreen(feedId: string) {
+  function displayFeedOnTopOfTheScreen(feedId: string) {
     const feed = document.getElementById(feedId);
     if (feed != null) {
       feed.scrollIntoView({
@@ -96,58 +104,53 @@ export class FeedWithAutoRefresh extends React.Component<IFeedWithAutoRefreshPro
     }
   }
 
-  displayAll = (): void => {
-    this.props.feed.displayAllLinks();
-    this.updateFeedState();
+  function displayAll(): void {
+    props.feed.displayAllLinks();
+    updateFeedState();
   }
 
-  addToReadList = (item: ReadListItem, index: number) => {
+  function addToReadList(item: ReadListItem, index: number) {
     return () => {
       const removingItem = index === 0;
-      this.props.feed.addItemToReadingList(item, removingItem);
+      props.feed.addItemToReadingList(item, removingItem);
       if (removingItem) {
-        this.updateFeedState();
+        updateFeedState();
       }
     };
   }
 
-  removeIfFirstOnClick = (item: ReadListItem, index: number) => {
+  function removeIfFirstOnClick(item: ReadListItem, index: number) {
     return () => {
       setTimeout(() => {
         const shouldRemoveItem = index === 0;
         if (shouldRemoveItem) {
-          this.clearFeed(item.publicationDate);
-          this.updateFeedState();
+          clearFeed(item.publicationDate);
+          updateFeedState();
         }
       }, 200);
   };
   }
   
-  render() {
-    !this.state || !this.state.links 
-    return !this.state || !this.state.links
-    ? <></>
-    : <Feed
-      id={this.props.id}
-      debug={this.props.debug}
-      links={this.state.links}
-      error={this.state.error}
-      logoUrl={this.state.logoUrl}
-      webSiteUrl={this.state.webSiteUrl as string}
-      title={this.state.title}
-      feedUrl={this.props.feed.feedData.url}
-      isYoutube={this.props.feed.isYoutube}
-      enhance={this.props.feed.feedData.enhance === true}
-      isDisplayingAllLinks={this.props.feed.isDisplayingAllLinks.bind(this.props.feed)}
-      refreshFeed={this.refreshFeed}
-      clearFeed ={this.clearFeed}
-      clearAllFeed={this.clearAllFeed}
-      displayAll={this.displayAll}
-      addToReadList={this.addToReadList}
-      removeIfFirstOnClick={this.removeIfFirstOnClick}
+  return <Feed
+      id={props.id}
+      debug={props.debug}
+      links={links}
+      error={error}
+      logoUrl={logoUrl}
+      webSiteUrl={webSiteUrl as string}
+      title={title}
+      feedUrl={props.feed.feedData.url}
+      isYoutube={props.feed.isYoutube}
+      enhance={props.feed.feedData.enhance === true}
+      isDisplayingAllLinks={props.feed.isDisplayingAllLinks.bind(props.feed)}
+      refreshFeed={refreshFeed}
+      clearFeed ={clearFeed}
+      clearAllFeed={clearAllFeed}
+      displayAll={displayAll}
+      addToReadList={addToReadList}
+      removeIfFirstOnClick={removeIfFirstOnClick}
     
-      displayContent={this.props.displayContent}
-      selectNextFeed={this.props.selectNextFeed}
+      displayContent={props.displayContent}
+      selectNextFeed={props.selectNextFeed}
     />
-  }
 }
