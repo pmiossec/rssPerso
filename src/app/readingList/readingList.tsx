@@ -7,99 +7,87 @@ interface IReadingListProps {
   store: GistStorage;
 }
 
-interface IReadingListState {}
+export function ReadingList(props: IReadingListProps) {
+  const [readListItems, setReadListItems] = React.useState<ReadListItem[]>([]);
+  const [isDisplayed, setIsDisplayed] = React.useState(false);
+  const [sortedByDate, setSortedByDate] = React.useState(false);
 
-export class ReadingList extends React.Component<
-  IReadingListProps,
-  IReadingListState
-> {
-  private displayReadingList: boolean = false;
-  private sortByDate: boolean = false;
+  React.useEffect(() => {
+    setInterval(() => refreshReadingList(), 30000);
+  }, []);
 
-  componentDidMount(): void {
-    setInterval(() => this.refreshReadingList(), 30000);
+  function refreshReadingList() {
+    setReadListItems(props.data.readList);
   }
 
-  refreshReadingList = () => {
-    this.setState({});
+  function remove(item: ReadListItem) {
+    props.store.removeItemFromReadingList(item);
+    refreshReadingList();
   }
 
-  remove = (item: ReadListItem): void => {
-    this.props.store.removeItemFromReadingList(item);
-    this.refreshReadingList();
-  }
-
-  openAndRemoveLink = (item: ReadListItem) => {
+  function openAndRemoveLink(item: ReadListItem) {
     return () => {
       setTimeout(() => {
-        this.remove(item);
-      },         200);
+        remove(item);
+      }, 200);
     };
   }
 
-  toggleVisibility = () => {
-    this.displayReadingList = !this.displayReadingList;
-    this.refreshReadingList();
+  function toggleVisibility() {
+    setIsDisplayed(!isDisplayed);
   }
 
-  changeSort = () => {
-    this.sortByDate = !this.sortByDate;
-    this.props.data.readList = this.sortByDate
-      ? this.props.store.sortListByDate(this.props.data.readList)
-      : this.props.store.sortListByFeed(this.props.data.readList);
-    this.refreshReadingList();
+  function changeSort() {
+    const isSortedByDate = !sortedByDate;
+    setSortedByDate(isSortedByDate);
+    setReadListItems(isSortedByDate
+      ? props.store.sortListByDate(props.data.readList)
+      : props.store.sortListByFeed(props.data.readList));
   }
 
-  render() {
-    let readItems;
-    if (!this.props.data) {
-      readItems = <div>loading...</div>;
-    } else {
-      const data = this.props.data;
-      readItems = data.readList.map((l: ReadListItem, i: number) => {
-        const feed = data.feeds.find(f => f.id === l.idFeed);
-        const now = new Date();
-        return (
-          <div key={i}>
-            [<span className="date">
-              {formatDate(l.publicationDate, now)}
-            </span>
-            |<a href={l.url} target="_blank" rel="noreferrer">
-              📄
-            </a>
-            |<a onClick={this.remove.bind(null, l)}>❌</a>]
-            <a href={l.url} target="_blank" rel="noreferrer" onClick={this.openAndRemoveLink(l)}>
-              {feed && <img src={feed.icon} />}
-              {l.title}
-            </a>
-          </div>
-        );
-      });
-    }
-
-    if (this.props.data) {
-      return (
-        <div className="feed">
-          <div className="title">
-            <a onClick={this.toggleVisibility}>
-              📑 Reading list ({!this.props.data.readList
-                ? 0
-                : this.props.data.readList.length}):
-            </a>
-            {this.displayReadingList &&
-              <a onClick={this.changeSort}>Sort by {this.sortByDate ? 'feed' : 'date'} </a>}
-            {this.props.store.couldBeRestored() &&
-              <a onClick={this.props.store.restoreLastRemoveReadingItem}>
-                Restore last deleted item{' '}
-              </a>}
-          </div>
-          <div className="links">
-            {this.displayReadingList && readItems}
-          </div>
-        </div>
-      );
-    } else {
-      return <div />;
-    }
+  if (!props.data) {
+    return (<div>loading...</div>);
   }
+
+  const data = props.data;
+  const readItems = readListItems.map((l: ReadListItem, i: number) => {
+    const feed = data.feeds.find(f => f.id === l.idFeed);
+    const now = new Date();
+    return (
+      <div key={i}>
+        [<span className="date">
+          {formatDate(l.publicationDate, now)}
+        </span>
+        |<a href={l.url} target="_blank" rel="noreferrer">
+          📄
+        </a>
+        |<a onClick={remove.bind(null, l)}>❌</a>]
+        <a href={l.url} target="_blank" rel="noreferrer" onClick={openAndRemoveLink(l)}>
+          {feed && <img src={feed.icon} />}
+          {l.title}
+        </a>
+      </div>
+    );
+  });
+
+  return (
+    <div className="feed">
+      <div className="title">
+        <a onClick={toggleVisibility}>
+          📑 Reading list ({!readItems
+            ? 0
+            : readItems.length}):
+        </a>
+        {isDisplayed &&
+          <a onClick={changeSort}>Sort by {sortedByDate ? 'feed' : 'date'} </a>}
+        {props.store.couldBeRestored() &&
+          <a onClick={props.store.restoreLastRemoveReadingItem}>
+            Restore last deleted item{' '}
+          </a>}
+      </div>
+      <div className="links">
+        {isDisplayed && readItems}
+      </div>
+    </div>
+  );
 }
