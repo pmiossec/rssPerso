@@ -13,11 +13,13 @@ interface IFeedWithAutoRefreshProps {
 
 interface IFeedWithAutoRefreshState {
   // timerId: number = -1;
+  links: Link[];
 }
 
 export class FeedWithAutoRefresh extends React.Component<IFeedWithAutoRefreshProps, IFeedWithAutoRefreshState> {
   timerId: number = -1;
 
+  state = { links: []};
   componentDidMount(): void {
     this.loadFeed().then(() => {
       if (this.props.feed.refreshInterval === noRefresh) {
@@ -38,19 +40,23 @@ export class FeedWithAutoRefresh extends React.Component<IFeedWithAutoRefreshPro
     }
   }
 
+  updateStateLinks(): void {
+    this.setState({ links: this.props.feed.getLinksToDisplay()});
+  }
+
   loadFeed(): Promise<void> {
     return this.props.feed.loadFeedContent().then(() => {
-      this.forceUpdate();
+      this.updateStateLinks();
     });
   }
 
   refresh(): void {
-    this.forceUpdate();
+    this.updateStateLinks();
   }
 
   clearAllFeed = (): void => {
     this.props.feed.clearAllFeed();
-    this.forceUpdate(() => {
+    this.setState({ links: this.props.feed.getLinksToDisplay()}, () => {
       this.props.selectNextFeed(this.props.id);
     });
   }
@@ -62,7 +68,7 @@ export class FeedWithAutoRefresh extends React.Component<IFeedWithAutoRefreshPro
   clearFeed = (date: Date): void => {
     this.props.feed.clearFeed(date);
     this.displayFeedOnTopOfTheScreen((this.props.id).toString());
-    this.forceUpdate();
+    this.updateStateLinks();
   }
 
   displayFeedOnTopOfTheScreen(feedId: string) {
@@ -78,7 +84,7 @@ export class FeedWithAutoRefresh extends React.Component<IFeedWithAutoRefreshPro
 
   displayAll = (): void => {
     this.props.feed.displayAllLinks();
-    this.forceUpdate();
+    this.updateStateLinks();
   }
 
   addToReadList = (item: ReadListItem, index: number) => {
@@ -86,7 +92,7 @@ export class FeedWithAutoRefresh extends React.Component<IFeedWithAutoRefreshPro
       const removingItem = index === 0;
       this.props.feed.addItemToReadingList(item, removingItem);
       if (removingItem) {
-        this.forceUpdate();
+        this.updateStateLinks();
       }
     };
   }
@@ -97,19 +103,20 @@ export class FeedWithAutoRefresh extends React.Component<IFeedWithAutoRefreshPro
         const shouldRemoveItem = index === 0;
         if (shouldRemoveItem) {
           this.clearFeed(item.publicationDate);
-          this.forceUpdate();
+          this.updateStateLinks();
         }
       }, 200);
   };
   }
   
   render() {
-    const linksToDisplay = this.props.feed.getLinksToDisplay();
-
-    return <Feed
+    !this.state || !this.state.links 
+    return !this.state || !this.state.links
+    ? <></>
+    : <Feed
       id={this.props.id}
       debug={this.props.debug}
-      links={linksToDisplay}
+      links={this.state.links}
       error={this.props.feed.error}
       logoUrl={this.props.feed.logo}
       webSiteUrl={this.props.feed.webSiteUrl as string}
