@@ -1,11 +1,11 @@
 import { useEffect, useState} from 'react';
 import { GistStorage, Gist, FeedData } from './storage/gistStorage';
 import { FeedService } from './feeds/feedService';
-import { Feed } from './feeds/feed';
 import { ReadingList } from './readingList/readingList';
 import { ToastContainer, toast, Zoom } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import useLocalStorage from 'use-local-storage';
+import { FeedWithAutoRefresh } from './feeds/feedWithAutoRefresh';
 
 interface IMainState {
   data: Gist;
@@ -214,7 +214,7 @@ function Main() {
         </div> */}
           <article className="feeds">
             {state.feedServices.map((feedService: FeedService, i: number) =>
-              <Feed
+              <FeedWithAutoRefresh
                 key={feedService.feedData.id}
                 id={i} // to be able to know the one just after (to put it in top of screen when clearing feed)
                 feed={feedService}

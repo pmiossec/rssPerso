@@ -3,108 +3,40 @@ import { FeedService, Link, noRefresh } from './feedService';
 import { ReadListItem } from '../storage/gistStorage';
 import YoutubeControls from './YoutubeControls';
 import { formatDate } from '../helper';
+import { useEffect } from 'react';
+import { FeedOnError } from './feedOnError';
 
 interface IFeedProps {
-  feed: FeedService;
   id: number;
   debug: boolean;
+  // New 
+  links: Link[];
+  error:  string | null;
+  logoUrl:  string;
+  webSiteUrl: string;
+  title: string;
+  feedUrl: string;
+  isYoutube: boolean;
+  enhance: boolean;
+  isDisplayingAllLinks(): boolean;
+  refreshFeed(): void;
+  clearFeed (date: Date): void;
+  clearAllFeed(): void;
+  displayAll(): void;
+  addToReadList(item: ReadListItem, index: number): void;
+  removeIfFirstOnClick(item: ReadListItem, index: number): void;
+
   displayContent(content: string) : void; 
   selectNextFeed(currentFeedId: number) : void;
 }
 
-interface IFeedState { }
+interface IFeedState {
+  // timerId: number;
+}
 
-export class Feed extends React.Component<IFeedProps, IFeedState> {
-  hiddenTextArea: HTMLTextAreaElement = document.createElement('textarea');
-  timerId: number = -1;
-
-  componentDidMount(): void {
-    this.loadFeed().then(() => {
-      if (this.props.feed.refreshInterval === noRefresh) {
-        this.timerId = -1;
-        return;
-      }
-      
-      this.timerId = window.setInterval(
-        () => this.loadFeed(),
-        this.props.feed.refreshInterval
-      );
-    });
-  }
-
-  componentWillUnmount(): void {
-    if (this.timerId !== -1) {
-      window.clearInterval(this.timerId);
-    }
-  }
-
-  loadFeed(): Promise<void> {
-    return this.props.feed.loadFeedContent().then(() => {
-      this.forceUpdate();
-    });
-  }
-
-  refresh(): void {
-    this.forceUpdate();
-  }
-
-  clearAllFeed = (): void => {
-    this.props.feed.clearAllFeed();
-    this.forceUpdate(() => {
-      this.props.selectNextFeed(this.props.id);
-    });
-  }
-
-  refreshFeed = (): void => {
-    this.loadFeed();
-  }
-
-  clearFeed = (date: Date): void => {
-    this.props.feed.clearFeed(date);
-    this.displayFeedOnTopOfTheScreen((this.props.id).toString());
-    this.forceUpdate();
-  }
-
-  displayFeedOnTopOfTheScreen(feedId: string) {
-    const feed = document.getElementById(feedId);
-    if (feed != null) {
-      feed.scrollIntoView({
-        block: 'nearest',
-        inline: 'nearest',
-        behavior: 'smooth'
-      });
-    }
-  }
-
-  displayAll = (): void => {
-    this.props.feed.displayAllLinks();
-    this.forceUpdate();
-  }
-
-  addToReadList = (item: ReadListItem, index: number) => {
-    return () => {
-      const removingItem = index === 0;
-      this.props.feed.addItemToReadingList(item, removingItem);
-      if (removingItem) {
-        this.forceUpdate();
-      }
-    };
-  }
-
-  removeIfFirstOnClick = (item: ReadListItem, index: number) => {
-    return () => {
-      setTimeout(() => {
-        const shouldRemoveItem = index === 0;
-        if (shouldRemoveItem) {
-          this.clearFeed(item.publicationDate);
-          this.forceUpdate();
-        }
-      }, 200);
-  };
-  }
-  
+export function Feed(props: IFeedProps) {
   // https://emojiterra.com/fr/activites/
-  readonly emojies = [
+  const emojies = [
     ['equipe de france', '🇫🇷‍'],
     ['jeux olympiques', '🏅'],
     ['alpinisme', '🧗'],
@@ -158,111 +90,103 @@ export class Feed extends React.Component<IFeedProps, IFeedState> {
     ['tous sports', '🎽'],
   ];
 
-  private enhanceWithCategory(title: string, other: string | undefined): string {
+  function enhanceWithCategory(title: string, other: string | undefined): string {
     if (other === undefined || other === '') {
       return title;
     }
 
-    for(let i = 0; i < this.emojies.length; i++)
+    for(let i = 0; i < emojies.length; i++)
     {
-      if (other.toLowerCase().indexOf(this.emojies[i][0]) !== -1) {
-        return `${this.emojies[i][1]}${title}`;
+      if (other.toLowerCase().indexOf(emojies[i][0]) !== -1) {
+        return `${emojies[i][1]}${title}`;
       }
     }    
     return title;
   }
 
-  render() {
-    const linksToDisplay = this.props.feed.getLinksToDisplay()
-      .filter(l => this.props.feed.feedData.filter === undefined
-      || l.title.indexOf(this.props.feed.feedData.filter) === -1);
-    if (linksToDisplay.length === 0) {
-      if (this.props.feed.error !== null)
-      {
-        return (
-          <div className="feed" id={this.props.id.toString()}>
-          <div className="title">
-            <div>
-              <img src={this.props.feed.logo} onClick={this.refreshFeed}/> &nbsp;
-              <a href={this.props.feed.webSiteUrl as string} target="_blank" rel="noreferrer" >
-                {' '}{this.props.feed.title}
-              </a>
-            </div>
-          </div>
-          <div>{this.props.feed.error} &nbsp; <a href={this.props.feed.feedData.url} target="_blank" rel="noreferrer" ><label className="rss"></label></a></div>
-        </div>
-        );
-      }
-      else {
-        return <div id={this.props.id.toString()} />;
-      }
-    } 
-    const options = (
-      <span>
-        <div className="text-badge close" onClick={this.clearAllFeed}>
-          <a>
-            {linksToDisplay.length}
+  const linksToDisplay = props.links;
+  if (linksToDisplay.length === 0) {
+    if (props.error !== null)
+    {
+      return (<FeedOnError
+                id={props.id.toString()}
+                logoUrl={props.logoUrl}
+                webSiteUrl={props.webSiteUrl as string}
+                title={props.title}
+                error={props.error}
+                feedUrl={props.feedUrl}
+                refreshFeed={props.refreshFeed}
+                 />);
+    }
+    else {
+      return <div id={props.id.toString()} />;
+    }
+  } 
+  const options = (
+    <span>
+      <div className="text-badge close" onClick={props.clearAllFeed}>
+        <a>
+          {linksToDisplay.length}
+        </a>
+      </div>
+      {!props.isDisplayingAllLinks() &&
+        <div className="text-badge" onClick={props.displayAll}>
+          <a>All</a>
+        </div>}
+    </span>
+  );
+
+  const now = new Date();
+  let links = (
+    <div>
+      {linksToDisplay.map((l: Link, i: number) =>
+        <div key={l.url} className='link'>
+          [<a onClick={() => props.clearFeed(l.publicationDate)}>
+            {formatDate(l.publicationDate, now)}
+          </a>|
+          <a onClick={() => props.addToReadList(l, i)}>📑</a>
+          {/* @ts-ignore */}
+          {/* {navigator.canShare && '|'  + <a onClick={() => navigator.share({url: link.url})} >🔗</a>} */}
+          ]
+          {!props.isYoutube && <a
+            href={l.url}
+            target="_blank"
+            rel="noreferrer"
+            onClick={() => props.removeIfFirstOnClick(l, i)}
+            // title={l.description}
+            onMouseOver={() => props.displayContent(l.content ? `<h1>${l.title}</h1>\n${l.content}` : '')}
+          >
+            {props.enhance === true ? enhanceWithCategory(l.title, l.other) : l.title}
           </a>
+          }
+          {props.isYoutube && <YoutubeControls link={l} displayContent={props.displayContent} />}
         </div>
-        {!this.props.feed.isDisplayingAllLinks() &&
-          <div className="text-badge" onClick={this.displayAll}>
-            <a>All</a>
-          </div>}
-      </span>
-    );
-
-    const now = new Date();
-    let links = (
-      <div>
-        {linksToDisplay.map((l: Link, i: number) =>
-          <div key={l.url} className='link'>
-            [<a onClick={this.clearFeed.bind(null, l.publicationDate)}>
-              {formatDate(l.publicationDate, now)}
-            </a>|
-            <a onClick={this.addToReadList(l, i)}>📑</a>
-            {/* @ts-ignore */}
-            {/* {navigator.canShare && '|'  + <a onClick={() => navigator.share({url: link.url})} >🔗</a>} */}
-            ]
-            {!this.props.feed.isYoutube && <a
-              href={l.url}
-              target="_blank"
-              rel="noreferrer"
-              onClick={this.removeIfFirstOnClick(l, i)}
-              // title={l.description}
-              onMouseOver={() => this.props.displayContent(l.content ? `<h1>${l.title}</h1>\n${l.content}` : '')}
-            >
-              {this.props.feed.feedData.enhance === true ? this.enhanceWithCategory(l.title, l.other) : l.title}
-            </a>
-            }
-            {this.props.feed.isYoutube && <YoutubeControls link={l} displayContent={this.props.displayContent} />}
-          </div>
-        )}
-      </div>
-    );
-
-    const closeButton = <div className="close-bottom-right" onClick={this.clearAllFeed}>
-      <div className="text-badge refresh">
-      <a className="emoji-light">❌</a>
+      )}
     </div>
-  </div>
+  );
 
-    return (
-      <div className="feed" id={this.props.id.toString()}>
-        <div className="title">
-          <div>
-            <img src={this.props.feed.logo} onClick={this.refreshFeed}/> &nbsp;
-            <a href={this.props.feed.webSiteUrl as string} target="_blank" rel="noreferrer" >
-              {' '}{this.props.feed.title}
-            </a>
-            {this.props.debug && <a href={this.props.feed.feedData.url} target="_blank" rel="noreferrer" >⚙️</a>}
-          </div>
-          <div>
-            {options}
-          </div>
+  const closeButton = <div className="close-bottom-right" onClick={props.clearAllFeed}>
+    <div className="text-badge refresh">
+    <a className="emoji-light">❌</a>
+  </div>
+</div>
+
+  return (
+    <div className="feed" id={props.id.toString()}>
+      <div className="title">
+        <div>
+          <img src={props.logoUrl} onClick={props.refreshFeed}/> &nbsp;
+          <a href={props.webSiteUrl as string} target="_blank" rel="noreferrer" >
+            {' '}{props.title}
+          </a>
+          {props.debug && <a href={props.feedUrl} target="_blank" rel="noreferrer" >⚙️</a>}
         </div>
-        {linksToDisplay.length !== 0 && links}
-        {linksToDisplay.length !== 0 && linksToDisplay.length > 8 && closeButton}
+        <div>
+          {options}
+        </div>
       </div>
-    );
-  }
+      {linksToDisplay.length !== 0 && links}
+      {linksToDisplay.length !== 0 && linksToDisplay.length > 8 && closeButton}
+    </div>
+  );
 }
