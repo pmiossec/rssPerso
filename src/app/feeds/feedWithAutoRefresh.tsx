@@ -104,9 +104,7 @@ export class FeedWithAutoRefresh extends React.Component<IFeedWithAutoRefreshPro
   }
   
   render() {
-    const linksToDisplay = this.props.feed.getLinksToDisplay()
-      .filter(l => this.props.feed.feedData.filter === undefined
-      || l.title.indexOf(this.props.feed.feedData.filter) === -1);
+    const linksToDisplay = this.props.feed.getLinksToDisplay();
 
     return <Feed
       id={this.props.id}

@@ -100,7 +100,9 @@ export class FeedService {
   }
 
   public getLinksToDisplay(): Link[] {
-    return this.shouldDisplayAllLinks ? this.allLinks : this.links;
+    return (this.shouldDisplayAllLinks ? this.allLinks : this.links)
+            .filter(l => this.feedData.filter === undefined
+                || l.title.indexOf(this.feedData.filter) === -1);
   }
 
   public isDisplayingAllLinks(): boolean {
