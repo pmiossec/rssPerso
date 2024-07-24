@@ -23,8 +23,8 @@ interface IFeedProps {
   clearFeed (date: Date): void;
   clearAllFeed(): void;
   displayAll(): void;
-  addToReadList(item: ReadListItem, index: number): void;
-  removeIfFirstOnClick(item: ReadListItem, index: number): void;
+  addToReadList(item: ReadListItem, index: number): () => void;
+  removeIfFirstOnClick(item: ReadListItem, index: number):  () => void;
 
   displayContent(content: string) : void; 
   selectNextFeed(currentFeedId: number) : void;
@@ -144,7 +144,7 @@ export function Feed(props: IFeedProps) {
           [<a onClick={() => props.clearFeed(l.publicationDate)}>
             {formatDate(l.publicationDate, now)}
           </a>|
-          <a onClick={() => props.addToReadList(l, i)}>📑</a>
+          <a onClick={props.addToReadList(l, i)}>📑</a>
           {/* @ts-ignore */}
           {/* {navigator.canShare && '|'  + <a onClick={() => navigator.share({url: link.url})} >🔗</a>} */}
           ]
@@ -152,7 +152,7 @@ export function Feed(props: IFeedProps) {
             href={l.url}
             target="_blank"
             rel="noreferrer"
-            onClick={() => props.removeIfFirstOnClick(l, i)}
+            onClick={props.removeIfFirstOnClick(l, i)}
             // title={l.description}
             onMouseOver={() => props.displayContent(l.content ? `<h1>${l.title}</h1>\n${l.content}` : '')}
           >

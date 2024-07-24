@@ -11,18 +11,6 @@ interface IFeedWithAutoRefreshProps {
   selectNextFeed(currentFeedId: number) : void;
 }
 
-interface IFeedWithAutoRefreshState {
-  // timerId: number = -1;
-  links: Link[];
-  error: string | null;
-  logoUrl: string;
-  webSiteUrl: string;
-  title: string;
-  feedUrl: string
-  isYoutube: boolean;
-  enhance: boolean;
-}
-
 export function FeedWithAutoRefresh(props: IFeedWithAutoRefreshProps) {
   let timerId: number = -1;
 

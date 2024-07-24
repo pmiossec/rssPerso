@@ -53,9 +53,9 @@ export function ReadingList(props: IReadingListProps) {
   }
 
   const data = props.data;
+  const now = new Date();
   const readItems = readListItems.map((l: ReadListItem, i: number) => {
     const feed = data.feeds.find(f => f.id === l.idFeed);
-    const now = new Date();
     return (
       <div key={i}>
         [<span className="date">
