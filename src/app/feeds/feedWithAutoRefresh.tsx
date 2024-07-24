@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { FeedService, Link, noRefresh } from './feedService';
 import { ReadListItem } from '../storage/gistStorage';
 import { Feed } from './feed';
@@ -32,10 +31,9 @@ export function FeedWithAutoRefresh(props: IFeedWithAutoRefreshProps) {
   const [logoUrl, setlogoUrl] = useState("null");
   const [webSiteUrl, setwebSiteUrl] = useState("null");
   const [title, settitle] = useState('Future title');
-  const [feedUrl, setfeedUrl] = useState(props.feed.feedData.url);
-  const [isYoutube, setIsYoutube] = useState(props.feed.isYoutube);
-  const [enhance, setEnhance] = useState(props.feed.feedData.enhance === true);
   const [links, setLinks] = useState<Link[]>([]);
+
+  const [selectNext, setSelectNext] = useState(false);
 
   useEffect(() => {
     loadFeed().then(() => {
@@ -56,6 +54,13 @@ export function FeedWithAutoRefresh(props: IFeedWithAutoRefreshProps) {
     }
   }, []);
 
+  useEffect(() => {
+    if (selectNext) {
+      props.selectNextFeed(props.id);
+      setSelectNext(false);
+    }
+  }, [selectNext]);
+
   function updateFeedState(): void {
     setError(props.feed.error);
     setLinks(props.feed.getLinksToDisplay());
@@ -70,17 +75,10 @@ export function FeedWithAutoRefresh(props: IFeedWithAutoRefreshProps) {
     });
   }
 
-  function refresh(): void {
-    updateFeedState();
-  }
-
   function clearAllFeed(): void {
     props.feed.clearAllFeed();
     setLinks(props.feed.getLinksToDisplay());
-    // TODO
-    // () => {
-    //   props.selectNextFeed(props.id);
-    // });
+    setSelectNext(true);
   }
 
   function refreshFeed(): void {
