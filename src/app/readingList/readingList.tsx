@@ -13,6 +13,7 @@ export function ReadingList(props: IReadingListProps) {
   const [sortedByDate, setSortedByDate] = React.useState(false);
 
   React.useEffect(() => {
+    refreshReadingList();
     setInterval(() => refreshReadingList(), 30000);
   }, []);
 
@@ -21,8 +22,10 @@ export function ReadingList(props: IReadingListProps) {
   }
 
   function remove(item: ReadListItem) {
-    props.store.removeItemFromReadingList(item);
-    refreshReadingList();
+    props.store.removeItemFromReadingList(item)
+      .then(() => {
+        refreshReadingList();
+      });
   }
 
   function openAndRemoveLink(item: ReadListItem) {

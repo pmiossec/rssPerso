@@ -284,7 +284,7 @@ export class GistStorage {
       .catch(() => {});
   }
 
-  public removeItemFromReadingList = (item: ReadListItem): void => {
+  public removeItemFromReadingList = async (item: ReadListItem): Promise<void> => {
     const msg = `Removing '${item.title}' from reading list`;
     toast.warning(`📃 ${msg}`, { autoClose: 1000 });
     const indexFound = this.data.readList.findIndex(i => {
@@ -292,13 +292,12 @@ export class GistStorage {
     });
     if (indexFound !== -1) {
       this.data.readList.splice(indexFound, 1);
-      this.saveReadingList(this.data.readList, msg)
-        .then(() => {
-          this.lastItemRemoved = item;
-        })
-        .catch(() => {
-          this.data.readList.splice(indexFound, 0, item);
-        });
+      try {
+        await this.saveReadingList(this.data.readList, msg)
+        this.lastItemRemoved = item;
+      } catch (error) {
+        this.data.readList.splice(indexFound, 0, item);
+      }
     }
   }
 
