@@ -24,7 +24,7 @@ console.log("window.location", window.location);
 const isLocal = (): boolean => window.location.hostname === "localhost";
 // cors proxy list: https://gist.github.com/jimmywarting/ac1be6ea0297c16c477e17f8fbe51347
 const proxyHandler: CorsProxyHandler = {
-    url: isLocal() ? 'localhost:7071/api/CorsProxyPerso?' : 'https://corsproxyperso20230118112658.azurewebsites.net/api/CorsProxyPerso?',
+    url: (isLocal() ? 'localhost:7071' /*'https://corsproxyperso20230118112658-test-slot.azurewebsites.net'/**/ : 'https://corsproxyperso20230118112658.azurewebsites.net') +'/api/CorsProxyPerso?',
     headers: defaultCorsProxyHeaders,
     responseHandler: defaultCorsProxyResponseHandler
   };
