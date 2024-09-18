@@ -133,10 +133,10 @@ export class FeedService {
           this.manageAtomFeed(xmlDoc.documentElement);
           break;
         default:
-          const error = `${this.feedData.url} => Feed format not supported:` + feedFormat;
+          const error = `${this.feedData.name ?? this.feedData.url}: Parsing failed!`;
           // tslint:disable-next-line:no-console
-          console.error(error);
-          toast.error('Feed format not supported:\n' + error, { autoClose: 3000 });
+          console.error(error, this.feedData.name, this.feedData.url, "Failed to parse content:", content);
+          toast.error(error + ' (see console...)', { autoClose: 3000 });
           this.title = error;
       }
 
