@@ -138,6 +138,10 @@ function Main() {
     }
   }
 
+  function clearBearerTokenFromLocalStorage() {
+    setBearerToken(undefined);
+  }
+
   const hashCode = (text: string) => {
     // tslint:disable-next-line:no-bitwise
     return text.split('').reduce((a, b) => { a = (a << 5) - a + b.charCodeAt(0); return a & a; }, 0);
@@ -166,6 +170,9 @@ function Main() {
         <div className="loading">
           <div>loading feeds...</div>
           <div className="spinner">&#9676;</div>
+        </div>
+        <div>
+          <a onClick={clearBearerTokenFromLocalStorage}>Clean access token</a>
         </div>
       </main>);
   }
