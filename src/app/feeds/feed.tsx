@@ -47,7 +47,7 @@ export function Feed(props: IFeedProps) {
     ['ligue 1', '⚽🇫🇷'],
     ['bundesliga', '⚽🇩🇪'],
     ['liga', '⚽🇪🇸'],
-    ['League', '⚽🇬🇧'],
+    ['league', '⚽🇬🇧'],
     ['football', '⚽'],
     ['foot', '⚽'],
     ['handball', '🤾'],
