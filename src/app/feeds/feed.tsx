@@ -188,7 +188,7 @@ export function Feed(props: IFeedProps) {
         </div>
       </div>
       {linksToDisplay.length !== 0 && links}
-      {linksToDisplay.length !== 0 && linksToDisplay.length > 8 && closeButton}
+      {linksToDisplay.length !== 0 && linksToDisplay.length > 2 && closeButton}
     </div>
   );
 }
